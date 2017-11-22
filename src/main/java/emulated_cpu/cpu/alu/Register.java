@@ -1,5 +1,8 @@
 package emulated_cpu.cpu.alu;
 
+/**
+ * This class wraps single register behaviour. Mainly used by Registers class.
+ */
 public class Register {
     private int value;
 
@@ -11,7 +14,6 @@ public class Register {
     public Register(int value) {
         this.value = value;
     }
-
 
     /**
      * Gets value stored in register.
@@ -29,6 +31,7 @@ public class Register {
      * @return bit value at index
      */
     public int getValueAt(int bitIndex) {
+        boundsCheck(bitIndex);
         return (value >> bitIndex) & 1;
     }
 
@@ -43,13 +46,20 @@ public class Register {
 
     /**
      * Sets or clears bit in specified position in register value.
+     *
      * @param bitIndex index of a changed bit
-     * @param value new value of bit
+     * @param value    new value of bit
      */
     public void setValueAt(int bitIndex, boolean value) {
+        boundsCheck(bitIndex);
         this.value = value ?
             this.value | (1 << bitIndex) :
             this.value & ~(1 << bitIndex);
+    }
+
+    private void boundsCheck(int bitIndex) {
+        if (bitIndex > 31 || bitIndex < 0)
+            throw new IllegalArgumentException("Desired bit index cannot be less than 0 and more than 31.");
     }
 
     @Override
