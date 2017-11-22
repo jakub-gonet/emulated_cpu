@@ -21,11 +21,20 @@ class RegistersTest {
         });
     }
 
-
     @Test
     void read_validRead() {
         Registers r = new Registers(0);
         Assertions.assertEquals(0, r.read(0));
+    }
+
+    @Test
+    void read_validReadButReadValueIsNull() throws NoSuchFieldException, IllegalAccessException {
+        final Registers r = new Registers(2);
+        final Field field = r.getClass().getDeclaredField("registers");
+        field.setAccessible(true);
+        ((ArrayList<Integer>)field.get(r)).set(0, null);
+
+        Assertions.assertThrows(NullPointerException.class, () -> r.read(0));
     }
 
     @Test

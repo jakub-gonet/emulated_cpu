@@ -42,6 +42,7 @@ public class Registers implements IOInterface {
      * @param address Index of a register.
      * @return Value at a address
      * @throws ArrayIndexOutOfBoundsException when reading from nonexistent register
+     * @throws NullPointerException           when read value is null
      */
     @Override
     public int read(int address) {
@@ -55,6 +56,7 @@ public class Registers implements IOInterface {
      * @param address Index of a register
      * @param data    Value to be written
      * @throws ArrayIndexOutOfBoundsException when writing to nonexistent register
+     * @throws NullPointerException           when data is null
      */
     @Override
     public void write(int address, int data) {
