@@ -1,0 +1,23 @@
+#---------Intellij IDEA---------
+.idea
+/out
+*.iml
+
+#---------Java---------
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+
+#---------Gradle---------
+.gradle
+/build
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
