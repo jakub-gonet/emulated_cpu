@@ -1,7 +1,6 @@
 package emulated_cpu.cpu.memory;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 /**
  * Memory is a class containing program memory. This memory is used to store program, variables and stack.
@@ -33,9 +32,12 @@ public class Memory implements IOInterface {
      * @throws IllegalArgumentException when new memory is null
      */
     public void setMemory(ArrayList<Integer> memory) {
-        this.memory = Optional.ofNullable(memory)
-                              .orElseThrow(
-                                  () -> new IllegalArgumentException("ERROR: memory object can't be null."));
+        if (memory == null)
+            throw new IllegalArgumentException("ERROR: memory object can't be null.");
+        if (memory.contains(null))
+            throw new IllegalArgumentException("ERROR: memory object can't contain null value.");
+
+        this.memory = memory;
     }
 
     /**
