@@ -139,6 +139,5 @@ class MemoryTest {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
             m.write(0, 5));
     }
-
-
 }
+
