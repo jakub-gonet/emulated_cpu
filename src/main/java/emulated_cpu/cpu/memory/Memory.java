@@ -1,6 +1,7 @@
 package emulated_cpu.cpu.memory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Memory is a class containing program memory. This memory is used to store program, variables and stack.
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class Memory implements IOInterface {
     private static Memory instance;
 
-    private ArrayList<Integer> memory;
+    private List<Integer> memory;
 
     private Memory() {
         memory = new ArrayList<>();
@@ -27,17 +28,16 @@ public class Memory implements IOInterface {
 
     /**
      * Swaps content of memory.
+     * NOTE: new memory containing null values leads to undefined behaviour.
      *
      * @param memory new memory to be loaded
-     * @throws IllegalArgumentException when new memory is null
+     * @throws IllegalArgumentException if new memory is null
      */
-    public void setMemory(ArrayList<Integer> memory) {
+    public void setMemory(List<Integer> memory) {
         if (memory == null)
-            throw new IllegalArgumentException("ERROR: memory object can't be null.");
-        if (memory.contains(null))
-            throw new IllegalArgumentException("ERROR: memory object can't contain null value.");
+            throw new NullPointerException("Memory object can't be null.");
 
-        this.memory = memory;
+        this.memory = new ArrayList<>(memory);
     }
 
     /**
@@ -45,7 +45,7 @@ public class Memory implements IOInterface {
      *
      * @return memory content
      */
-    public ArrayList<Integer> getMemory() {
+    public List<Integer> getMemory() {
         return memory;
     }
 
@@ -54,8 +54,8 @@ public class Memory implements IOInterface {
      *
      * @param address address of data to be read
      * @return read data from memory
-     * @throws IndexOutOfBoundsException when reading from nonexistent memory address
-     * @throws NullPointerException      when read value is null
+     * @throws IndexOutOfBoundsException if reading from nonexistent memory address
+     * @throws NullPointerException      if read value is null
      */
     @Override
     public int read(int address) {
@@ -67,7 +67,7 @@ public class Memory implements IOInterface {
      *
      * @param address address of data.
      * @param data    data to be written in memory
-     * @throws NullPointerException when data is null
+     * @throws NullPointerException if data is null
      */
     @Override
     public void write(int address, int data) {

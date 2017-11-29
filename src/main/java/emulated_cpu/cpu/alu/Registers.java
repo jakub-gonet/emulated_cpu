@@ -25,7 +25,7 @@ public class Registers implements IOInterface {
      * Creates new Register object. This object is guarantied to have at least one register - status register.
      *
      * @param size count of registers. There's no need to take into account status register
-     * @throws IllegalArgumentException when size is negative value
+     * @throws IllegalArgumentException if size is negative value
      */
     public Registers(int size) {
         if (size >= 0) {
@@ -41,8 +41,8 @@ public class Registers implements IOInterface {
      *
      * @param address Index of a register.
      * @return Value at a address
-     * @throws ArrayIndexOutOfBoundsException when reading from nonexistent register
-     * @throws NullPointerException           when read value is null
+     * @throws ArrayIndexOutOfBoundsException if reading from nonexistent register
+     * @throws NullPointerException           if read value is null
      */
     @Override
     public int read(int address) {
@@ -55,8 +55,8 @@ public class Registers implements IOInterface {
      *
      * @param address Index of a register
      * @param data    Value to be written
-     * @throws ArrayIndexOutOfBoundsException when writing to nonexistent register
-     * @throws NullPointerException           when data is null
+     * @throws ArrayIndexOutOfBoundsException if writing to nonexistent register
+     * @throws NullPointerException           if data is null
      */
     @Override
     public void write(int address, int data) {

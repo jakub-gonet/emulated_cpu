@@ -80,17 +80,8 @@ class MemoryTest {
     void setMemory_butMemoryArgumentIsNull() {
         Memory m = Memory.getInstance();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
+        Assertions.assertThrows(NullPointerException.class, () ->
             m.setMemory(null));
-    }
-
-    @Test
-    void setMemory_butMemoryArgumentContainsNullValue() {
-        Memory m = Memory.getInstance();
-
-        ArrayList<Integer> p = new ArrayList<>(Arrays.asList(1, null, 3, 4, 0, 1));
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-            m.setMemory(p));
     }
 
     @Test

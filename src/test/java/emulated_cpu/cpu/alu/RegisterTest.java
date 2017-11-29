@@ -18,7 +18,7 @@ class RegisterTest {
     }
 
     @Test
-    void getValueAt_addressOutOfRegisterBounds() {
+    void getValueAt_butAddressOutOfRegisterBounds() {
         Register r = new Register(7);
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             r.getValueAt(-1);

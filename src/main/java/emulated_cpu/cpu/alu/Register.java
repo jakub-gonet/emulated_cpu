@@ -57,9 +57,15 @@ public class Register {
             this.value & ~(1 << bitIndex);
     }
 
+    /**
+     * Checks if index is in range of a integer value.
+     *
+     * @param bitIndex bit index to be checked
+     * @throws IndexOutOfBoundsException if out of range of integer bit range
+     */
     private void boundsCheck(int bitIndex) {
         if (bitIndex > 31 || bitIndex < 0)
-            throw new IllegalArgumentException("Desired bit index cannot be less than 0 and more than 31.");
+            throw new IndexOutOfBoundsException("Desired bit index cannot be less than 0 and more than 31.");
     }
 
     @Override

@@ -6,7 +6,7 @@ public interface IOInterface {
      *
      * @param address address of data to be read
      * @return read data
-     * @throws NullPointerException when read value is null
+     * @throws NullPointerException if read value is null
      */
     int read(int address);
 
@@ -15,7 +15,7 @@ public interface IOInterface {
      *
      * @param address address of data
      * @param data    data to be written
-     * @throws NullPointerException when data is null
+     * @throws NullPointerException if data is null
      */
     void write(int address, int data);
 }

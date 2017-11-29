@@ -15,7 +15,7 @@ class RegistersTest {
     }
 
     @Test
-    void constructor_negativeRegistersNumber() {
+    void constructor_butNegativeRegistersNumber() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Registers r = new Registers(-1);
         });
@@ -38,7 +38,7 @@ class RegistersTest {
     }
 
     @Test
-    void read_addressIsOutOfRegistersBounds() {
+    void read_butAddressIsOutOfRegistersBounds() {
         Registers r = new Registers(1);
         Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
             r.read(-1));
@@ -47,7 +47,7 @@ class RegistersTest {
     }
 
     @Test
-    void write_writingToAddressRegister() {
+    void write_butWritingToAddressRegister() {
         Registers r = new Registers(1);
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setErr(new PrintStream(outContent));
@@ -72,7 +72,7 @@ class RegistersTest {
     }
 
     @Test
-    void write_addressIsOutOfRegistersBounds() {
+    void write_butAddressIsOutOfRegistersBounds() {
         Registers r = new Registers(1);
 
         Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
@@ -96,14 +96,14 @@ class RegistersTest {
     }
 
     @Test
-    void changeStateOfStatusRegisterFlag_useIllegalFlagName() {
+    void changeStateOfStatusRegisterFlag_butUsingIllegalFlagName() {
         Registers r = new Registers(1);
         Assertions.assertThrows(IllegalArgumentException.class, () ->
             r.changeStateOfStatusRegisterFlag("P", false));
     }
 
     @Test
-    void changeStateOfStatusRegisterFlag_useNullFlagName() {
+    void changeStateOfStatusRegisterFlag_butUsingNullFlagName() {
         Registers r = new Registers(1);
         Assertions.assertThrows(NullPointerException.class, () ->
             r.changeStateOfStatusRegisterFlag(null, false));
@@ -111,7 +111,7 @@ class RegistersTest {
 
 
     @Test
-    void changeStateOfStatusRegisterFlag_useLegalFlagNameButLowercase() {
+    void changeStateOfStatusRegisterFlag_usingLegalFlagNameButLowercase() {
         Registers r = new Registers(1);
         Assertions.assertThrows(IllegalArgumentException.class, () ->
             r.changeStateOfStatusRegisterFlag("z", false));
