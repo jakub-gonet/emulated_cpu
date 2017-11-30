@@ -10,42 +10,75 @@ package emulated_cpu.cpu.alu;
  * bit 2 - negative flag (indicates less than zero value of last operation) - N <p>
  * bit 3-31 - not used <p>
  */
-public class StatusRegister extends Register {
+class StatusRegister extends Register {
     /**
-     * Creates new Status Register object with specified initial value.
+     * Creates new StatusRegister object with specified initial value.
      *
      * @param value value to be stored in register
      */
-    public StatusRegister(int value) {
+    StatusRegister(int value) {
         super(value);
     }
 
+
     /**
-     * Sets specific flag in status register.
-     *
-     * @param flagName short name of flag, for example "E", "Z" etc.
-     *                 Check class documentation for more information
-     * @param state    new state for that flag
-     * @throws IllegalArgumentException if flag doesn't exist
-     * @throws NullPointerException     if flag is null
+     * Creates new StatusRegister object with initial 0 value.
      */
-    public void changeStateOfStatusRegisterFlag(String flagName, boolean state) {
-        int flagNumber;
+    StatusRegister() {
+        super();
+    }
 
-        switch (flagName) {
-            case "Z":
-                flagNumber = 0;
-                break;
-            case "C":
-                flagNumber = 1;
-                break;
-            case "N":
-                flagNumber = 2;
-                break;
-            default:
-                throw new IllegalArgumentException("Flag doesn't exist.");
-        }
+    /**
+     * Gets state of zero flag.
+     *
+     * @return state of zero flag
+     */
+    boolean getZeroFlagState() {
+        return this.getValueAt(0) == 1;
+    }
 
-        this.setValueAt(flagNumber, state);
+    /**
+     * Sets zero flag to new state.
+     *
+     * @param state new state
+     */
+    void setZeroFlagState(boolean state) {
+        this.setValueAt(0, state);
+    }
+
+    /**
+     * Gets state of carry flag.
+     *
+     * @return state of cary flag
+     */
+    boolean getCarryFlagState() {
+        return this.getValueAt(1) == 1;
+    }
+
+    /**
+     * Sets carry flag to new state.
+     *
+     * @param state new state
+     */
+    void setCarryFlagState(boolean state) {
+        this.setValueAt(1, state);
+    }
+
+    /**
+     * Gets state of negative flag.
+     *
+     * @return state of negative flag
+     */
+    boolean getNegativeFlagState() {
+        return this.getValueAt(2) == 1;
+    }
+
+    /**
+     * Sets negative flag to new state.
+     *
+     * @param state new state
+     */
+    void setNegativeFlagState(boolean state) {
+        this.setValueAt(2, state);
     }
 }

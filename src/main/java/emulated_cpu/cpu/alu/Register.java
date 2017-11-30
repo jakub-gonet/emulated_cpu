@@ -16,6 +16,14 @@ public class Register {
     }
 
     /**
+     * Creates new Register with initial 0 value.
+     */
+    public Register() {
+        this(0);
+    }
+
+
+    /**
      * Gets value stored in register.
      *
      * @return register value

@@ -30,6 +30,10 @@ public class Registers implements IOInterface {
         }
     }
 
+    public Registers() {
+        this(defaultRegistersNumber);
+    }
+
     /**
      * Reads value from register set and returns it.
      *
@@ -61,13 +65,11 @@ public class Registers implements IOInterface {
     }
 
     /**
-     * Sets or clears specified bit in status register.
-     *
-     * @param flagName flag shortcut to be changed, single letter
-     * @param state next state of a bit (cleared, set)
+     * Gets status register from Registers class.
+     * @return Register casted to StatusRegister
      */
-    public void changeStateOfStatusRegisterFlag(String flagName, boolean state){
-        ((StatusRegister)this.registers.get(0)).changeStateOfStatusRegisterFlag(flagName, state);
+    public StatusRegister getStatusRegister() {
+        return (StatusRegister) registers.get(0);
     }
 
 
@@ -76,12 +78,14 @@ public class Registers implements IOInterface {
         StringBuilder str = new StringBuilder();
         str.append("Status register: ")
            .append(Integer.toBinaryString(registers.get(0)
-                                                   .getValue()));
+                                                   .getValue()))
+           .append('\n');
         for (int i = 1; i < registers.size(); i++) {
             str.append("Register ")
                .append(i)
                .append(": ")
-               .append(registers.get(i));
+               .append(registers.get(i))
+               .append('\n');
         }
         return str.toString();
     }
