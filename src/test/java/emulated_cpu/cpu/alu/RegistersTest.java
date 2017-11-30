@@ -30,9 +30,10 @@ class RegistersTest {
     @Test
     void read_validReadButReadValueIsNull() throws NoSuchFieldException, IllegalAccessException {
         final Registers r = new Registers(2);
-        final Field field = r.getClass().getDeclaredField("registers");
+        final Field field = r.getClass()
+                             .getDeclaredField("registers");
         field.setAccessible(true);
-        ((ArrayList<Integer>)field.get(r)).set(0, null);
+        ((ArrayList<Integer>) field.get(r)).set(0, null);
 
         Assertions.assertThrows(NullPointerException.class, () -> r.read(0));
     }
@@ -80,41 +81,4 @@ class RegistersTest {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
             r.write(2, 0));
     }
-
-
-    @Test
-    void changeStateOfStatusRegisterFlag_checkForExistingFlag() throws NoSuchFieldException, IllegalAccessException {
-        final Registers r = new Registers(1);
-
-        final Field field = r.getClass()
-                             .getDeclaredField("registers");
-        field.setAccessible(true);
-        r.changeStateOfStatusRegisterFlag("Z", true);
-
-        Assertions.assertEquals(1, ((ArrayList<Register>) field.get(r)).get(0)
-                                                                       .getValue());
-    }
-
-    @Test
-    void changeStateOfStatusRegisterFlag_butUsingIllegalFlagName() {
-        Registers r = new Registers(1);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-            r.changeStateOfStatusRegisterFlag("P", false));
-    }
-
-    @Test
-    void changeStateOfStatusRegisterFlag_butUsingNullFlagName() {
-        Registers r = new Registers(1);
-        Assertions.assertThrows(NullPointerException.class, () ->
-            r.changeStateOfStatusRegisterFlag(null, false));
-    }
-
-
-    @Test
-    void changeStateOfStatusRegisterFlag_usingLegalFlagNameButLowercase() {
-        Registers r = new Registers(1);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-            r.changeStateOfStatusRegisterFlag("z", false));
-    }
-
 }
