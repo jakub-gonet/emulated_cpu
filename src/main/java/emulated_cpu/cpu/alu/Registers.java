@@ -8,13 +8,6 @@ import java.util.ArrayList;
  * This class encapsulates register set mainly for ALU.
  * Every register has 32 bits (Java int implementation).
  * First register is used as status register and shouldn't be used as general purpose register.
- * <p>
- * Structure of a Status register:
- * <p>
- * bit 0 - zero flag (indicates zero value of last operation) - Z <p>
- * bit 1 - carry flag (indicates more than zero value of last operation) - C <p>
- * bit 2 - negative flag (indicates less than zero value of last operation) - N <p>
- * bit 3-31 - not used <p>
  */
 public class Registers implements IOInterface {
     private ArrayList<Register> registers;
@@ -28,12 +21,17 @@ public class Registers implements IOInterface {
      * @throws IllegalArgumentException if size is negative value
      */
     public Registers(int size) {
-        if (size >= 0) {
-            registers = new ArrayList<>();
-            for (int i = 0; i < size + 1; i++) {
-                registers.add(new Register(0));
-            }
-        } else throw new IllegalArgumentException("Size cannot be negative.");
+        if (size < 0) throw new IllegalArgumentException("Size cannot be negative.");
+
+        registers = new ArrayList<>();
+        registers.add(new StatusRegister(0));
+        for (int i = 0; i < size; i++) {
+            registers.add(new Register(0));
+        }
+    }
+
+    public Registers() {
+        this(defaultRegistersNumber);
     }
 
     /**
@@ -67,46 +65,27 @@ public class Registers implements IOInterface {
     }
 
     /**
-     * Sets specific flag in status register.
-     *
-     * @param flagName short name of flag, for example "E", "Z" etc.
-     *                 Check class documentation for more information
-     * @param state    new state for that flag
-     * @throws IllegalArgumentException if flag doesn't exist
-     * @throws NullPointerException     if flag is null
+     * Gets status register from Registers class.
+     * @return Register casted to StatusRegister
      */
-    public void changeStateOfStatusRegisterFlag(String flagName, boolean state) {
-        int flagNumber;
-
-        switch (flagName) {
-            case "Z":
-                flagNumber = 0;
-                break;
-            case "C":
-                flagNumber = 1;
-                break;
-            case "N":
-                flagNumber = 2;
-                break;
-            default:
-                throw new IllegalArgumentException("Flag doesn't exist.");
-        }
-
-        registers.get(0)
-                 .setValueAt(flagNumber, state);
+    public StatusRegister getStatusRegister() {
+        return (StatusRegister) registers.get(0);
     }
+
 
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
         str.append("Status register: ")
            .append(Integer.toBinaryString(registers.get(0)
-                                                   .getValue()));
+                                                   .getValue()))
+           .append('\n');
         for (int i = 1; i < registers.size(); i++) {
             str.append("Register ")
                .append(i)
                .append(": ")
-               .append(registers.get(i));
+               .append(registers.get(i))
+               .append('\n');
         }
         return str.toString();
     }
