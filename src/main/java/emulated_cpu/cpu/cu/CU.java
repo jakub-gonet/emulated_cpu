@@ -1,12 +1,14 @@
 package emulated_cpu.cpu.cu;
 
+import emulated_cpu.Arguments;
 import emulated_cpu.OpCode;
+import emulated_cpu.OperatingUnit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CU {
-    private int instructionPointer = 0;
+public class CU implements OperatingUnit {
+    public int instructionPointer = 0;
     private boolean stopped = false;
 
     private final ArrayList<OpCode> CU_OP_CODES = new ArrayList<>(Arrays.asList(
@@ -21,18 +23,22 @@ public class CU {
         }, 1)
     ));
 
-    void executeCuOpcode(int opCode, Integer arg1) {
+    /**
+     * Execute CU OP code.
+     *
+     * @param opCode OP code to select operation
+     * @param args   arguments passed as operation arguments
+     * @return result of the OP code, mostly null
+     */
+    @Override
+    public Integer execute(int opCode, Arguments args) {
         checkIfCuOPCodeExists(opCode);
         CU_OP_CODES.get(opCode)
-                   .checkIfArgumentsMatchRequiredCount(arg1, null);
+                   .checkIfArgumentsMatchRequiredCount(args);
 
-        CU_OP_CODES.get(opCode)
-                   .getOperation()
-                   .apply(arg1, null);
-    }
-
-    void executeCuOpcode(int opCode) {
-        executeCuOpcode(opCode, null);
+        return CU_OP_CODES.get(opCode)
+                          .getOperation()
+                          .apply(args.arg1, null);
     }
 
     /**
@@ -45,11 +51,13 @@ public class CU {
             throw new IndexOutOfBoundsException("OP code " + opCode + " doesn't exist");
     }
 
-    public int getInstructionPointer() {
-        return instructionPointer;
-    }
-
-    public void setInstructionPointer(int instructionPointer) {
-        this.instructionPointer = instructionPointer;
+    /**
+     * Gets CU OP codes.
+     *
+     * @return ArrayList of OP codes
+     */
+    @Override
+    public ArrayList<OpCode> getOpCodes() {
+        return CU_OP_CODES;
     }
 }
