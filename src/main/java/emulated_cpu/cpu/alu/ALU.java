@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * ALU class is used with ControlUnit class to perform all mathematical operations.
+ * ALU class is used with CU class to perform all mathematical operations.
  */
 public final class ALU {
     private Registers registers;
@@ -120,5 +120,13 @@ public final class ALU {
      */
     void setRegister(int address, int value) {
         this.registers.write(address, value);
+    }
+
+    /**
+     * Gets OP code list.
+     * @return ArrayList of OP codes
+     */
+    public ArrayList<OpCode> getAluOpCodes() {
+        return ALU_OP_CODES;
     }
 }
