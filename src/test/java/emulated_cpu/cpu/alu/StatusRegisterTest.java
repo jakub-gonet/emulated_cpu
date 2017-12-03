@@ -11,4 +11,19 @@ class StatusRegisterTest {
         Assertions.assertTrue(statusRegister.getCarryFlagState());
         Assertions.assertTrue(statusRegister.getNegativeFlagState());
     }
+
+    @Test
+    void setters() {
+        StatusRegister statusRegister = new StatusRegister();
+        statusRegister.setZeroFlagState(true);
+        Assertions.assertTrue((statusRegister.getValueAt(0) == 1));
+
+        statusRegister = new StatusRegister();
+        statusRegister.setCarryFlagState(true);
+        Assertions.assertTrue((statusRegister.getValueAt(1) == 1));
+
+        statusRegister = new StatusRegister();
+        statusRegister.setNegativeFlagState(true);
+        Assertions.assertTrue((statusRegister.getValueAt(2) == 1));
+    }
 }

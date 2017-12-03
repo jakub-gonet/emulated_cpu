@@ -13,19 +13,34 @@ class ALUTest {
         Assertions.assertTrue(alu.getRegisters()
                                  .getStatusRegister()
                                  .getNegativeFlagState());
+        alu = new ALU();
         alu.compute(12, -1, 4);
         Assertions.assertTrue(alu.getRegisters()
                                  .getStatusRegister()
                                  .getNegativeFlagState());
+        alu = new ALU();
         alu.compute(12, -1, -4);
         Assertions.assertTrue(alu.getRegisters()
                                  .getStatusRegister()
                                  .getCarryFlagState());
+        alu = new ALU();
         alu.compute(12, 1, 1);
         Assertions.assertTrue(alu.getRegisters()
                                  .getStatusRegister()
                                  .getZeroFlagState());
+    }
 
+    @Test
+    void compute_butWithInvalidNumberOfArguments() {
+        ALU alu = new ALU();
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+            alu.compute(0, 1, 5));
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+            alu.compute(2, 1));
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+            alu.compute(2, 1));
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+            alu.compute(9, 1, 1));
     }
 
     @Test
@@ -43,5 +58,4 @@ class ALUTest {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
             alu.setRegister(6, 20));
     }
-
 }
