@@ -60,7 +60,7 @@ public final class ALU {
     /**
      * Creates new ALU object with default number of registers defined by variable in Registers class.
      */
-    ALU() {
+    public ALU() {
         registers = new Registers();
     }
 
@@ -73,14 +73,9 @@ public final class ALU {
      * @return result of operation or null if operation doesn't return anything
      */
     Integer compute(int opCode, Integer arg1, Integer arg2) {
-        checkIfOPCodeExists(opCode);
-
-        int requiredArgumentCount = ALU_OP_CODES.get(opCode)
-                                                .getRequiredArguments();
-        int argumentCount = 0;
-        if (arg1 != null) argumentCount++;
-        if (arg2 != null) argumentCount++;
-        checkArgumentsCountForOpCode(requiredArgumentCount, argumentCount, opCode);
+        checkIfAluOPCodeExists(opCode);
+        ALU_OP_CODES.get(opCode)
+                    .checkIfArgumentsMatchRequiredCount(arg1, arg2);
 
         return ALU_OP_CODES.get(opCode)
                            .getOperation()
@@ -103,21 +98,9 @@ public final class ALU {
      *
      * @param opCode OP code to be checked
      */
-    private void checkIfOPCodeExists(int opCode) {
-        if (opCode > ALU_OP_CODES.size() - 1)
+    private void checkIfAluOPCodeExists(int opCode) {
+        if (opCode >= ALU_OP_CODES.size())
             throw new IndexOutOfBoundsException("OP code " + opCode + " doesn't exist");
-    }
-
-    /**
-     * Checks if passed arguments count match required argument count.
-     *
-     * @param required number of required arguments
-     * @param actual   actual number of arguments
-     * @param opCode   OP code value, used to throw exception with valuable message
-     */
-    private void checkArgumentsCountForOpCode(int required, int actual, int opCode) {
-        if (required != actual)
-            throw new IllegalArgumentException("Passed arguments don't match arguments count for " + opCode + " op code");
     }
 
     /**
