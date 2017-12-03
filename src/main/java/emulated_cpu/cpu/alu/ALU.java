@@ -121,4 +121,12 @@ public final class ALU {
     void setRegister(int address, int value) {
         this.registers.write(address, value);
     }
+
+    /**
+     * Gets OP code list.
+     * @return ArrayList of OP codes
+     */
+    public ArrayList<OpCode> getAluOpCodes() {
+        return ALU_OP_CODES;
+    }
 }
