@@ -1,16 +1,10 @@
 package emulated_cpu;
 
+import emulated_cpu.cpu.memory.IOInterface;
+
 public class Arguments {
-    private Integer arg1, arg2;
-
-    Arguments(Integer arg1, Integer arg2) {
-        this.arg1 = arg1;
-        this.arg2 = arg2;
-    }
-
-    Arguments(Integer arg1) {
-        this(arg1, null);
-    }
+    public Integer arg1, arg2;
+    public IOInterface firstAddressType, secondAddressType;
 
     public int getArgumentsCount() {
         int argumentCount = 0;
@@ -18,13 +12,5 @@ public class Arguments {
         if (arg2 != null) argumentCount++;
 
         return argumentCount;
-    }
-
-    public Integer getArg1() {
-        return arg1;
-    }
-
-    public Integer getArg2() {
-        return arg2;
     }
 }
