@@ -7,13 +7,19 @@ import emulated_cpu.cpu.cu.CU;
 import emulated_cpu.cpu.memory.IOInterface;
 import emulated_cpu.cpu.memory.Memory;
 
+import java.util.ArrayList;
+
 public class CPU {
     private ALU alu = new ALU();
     private CU cu = new CU();
     private Memory memory = Memory.getInstance();
 
+    public CPU(ArrayList<Integer> program) {
+        memory.setMemory(program);
+    }
+
     private int fetchNextOperationOrValue(CU cu) {
-        return memory.read(cu.instructionPointer++);//TODO use IOInterface
+        return memory.read(cu.instructionPointer++);
     }
 
     void executeNextOperation() {
