@@ -17,8 +17,9 @@ public class CU implements OperatingUnit {
             stopped = true;
             return null;
         }, 0),                          //HLT
+        new OpCode((x, y) -> y, 2),     //MOV
         new OpCode((x, y) -> {                         //JMP
-            instructionPointer = x;
+            instructionPointer = y;
             return null;
         }, 1)
     ));
@@ -38,7 +39,7 @@ public class CU implements OperatingUnit {
 
         return CU_OP_CODES.get(opCode)
                           .getOperation()
-                          .apply(args.arg1, null);
+                          .apply(args.arg1, args.arg2);
     }
 
     /**
