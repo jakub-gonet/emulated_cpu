@@ -10,7 +10,7 @@ package emulated_cpu.cpu.alu;
  * bit 2 - negative flag (indicates less than zero value of last operation) - N <p>
  * bit 3-31 - not used <p>
  */
-class StatusRegister extends Register {
+public class StatusRegister extends Register {
     /**
      * Creates new StatusRegister object with specified initial value.
      *
@@ -33,7 +33,7 @@ class StatusRegister extends Register {
      *
      * @return state of zero flag
      */
-    boolean getZeroFlagState() {
+    public boolean getZeroFlagState() {
         return this.getValueAt(0) == 1;
     }
 
@@ -51,7 +51,7 @@ class StatusRegister extends Register {
      *
      * @return state of cary flag
      */
-    boolean getCarryFlagState() {
+    public boolean getCarryFlagState() {
         return this.getValueAt(1) == 1;
     }
 
@@ -69,7 +69,7 @@ class StatusRegister extends Register {
      *
      * @return state of negative flag
      */
-    boolean getNegativeFlagState() {
+    public boolean getNegativeFlagState() {
         return this.getValueAt(2) == 1;
     }
 

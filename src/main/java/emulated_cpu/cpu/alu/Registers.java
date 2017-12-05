@@ -35,6 +35,15 @@ public class Registers implements IOInterface {
     }
 
     /**
+     * Gets total register count.
+     *
+     * @return count of registers
+     */
+    public int size() {
+        return registers.size();
+    }
+
+    /**
      * Reads value from register set and returns it.
      *
      * @param address Index of a register.
@@ -58,14 +67,17 @@ public class Registers implements IOInterface {
      */
     @Override
     public void write(int address, int data) {
+        /* TODO Disabled while no logger is added
         if (address == 0)
             System.err.println("Did you mean to overwrite status register?");
+         */
         registers.get(address)
                  .setValue(data);
     }
 
     /**
      * Gets status register from Registers class.
+     *
      * @return Register casted to StatusRegister
      */
     public StatusRegister getStatusRegister() {

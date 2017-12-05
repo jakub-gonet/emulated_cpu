@@ -104,7 +104,7 @@ public final class ALU implements OperatingUnit {
     }
 
     /**
-     * Sets specifed registers value.
+     * Sets specified registers value.
      *
      * @param address address of modified register
      * @param value   new value of register
