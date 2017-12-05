@@ -11,7 +11,7 @@ public interface IOInterface {
     int read(int address);
 
     /**
-     * Wirtes data to IOInterface at specified index.
+     * Writes data to IOInterface at specified index.
      *
      * @param address address of data
      * @param data    data to be written

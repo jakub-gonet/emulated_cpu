@@ -1,14 +1,16 @@
 package emulated_cpu.cpu.alu;
 
+import emulated_cpu.Arguments;
 import emulated_cpu.OpCode;
+import emulated_cpu.OperatingUnit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * ALU class is used with ControlUnit class to perform all mathematical operations.
+ * ALU class is used with CU class to perform all mathematical operations.
  */
-public final class ALU {
+public final class ALU implements OperatingUnit {
     private Registers registers;
 
     /**
@@ -18,7 +20,7 @@ public final class ALU {
         new OpCode((x, y) -> ++x, 1),   //INC
         new OpCode((x, y) -> --x, 1),   //DEC
         new OpCode((x, y) -> x + y, 2), //ADD
-        new OpCode((x, y) -> x - y, 2), //DEC
+        new OpCode((x, y) -> x - y, 2), //SUB
         new OpCode((x, y) -> x * y, 2), //MUL
         new OpCode((x, y) -> x / y, 2), //DIV
         new OpCode((x, y) -> x & y, 2), //AND
@@ -26,7 +28,7 @@ public final class ALU {
         new OpCode((x, y) -> x ^ y, 2), //XOR
         new OpCode((x, y) -> ~x, 1),    //NOT
         new OpCode((x, y) -> x >> y, 2),//RSHFT
-        new OpCode((x, y) -> x >> y, 2),//LSHFT
+        new OpCode((x, y) -> x << y, 2),//LSHFT
         new OpCode((x, y) -> {                          //CMP
             int diff = x - y;
             registers.getStatusRegister()
@@ -65,32 +67,21 @@ public final class ALU {
     }
 
     /**
-     * This method computes passed values with operation specified by OP code.
+     * Calculates value specified by OP code.
      *
-     * @param opCode specifies which operation should be performed
-     * @param arg1   value of first argument. Shouldn't be null
-     * @param arg2   value of second argument. Shouldn't be null
-     * @return result of operation or null if operation doesn't return anything
+     * @param opCode OP code to select operation
+     * @param args   arguments passed as operation arguments
+     * @return calculated value
      */
-    Integer compute(int opCode, Integer arg1, Integer arg2) {
+    @Override
+    public Integer execute(int opCode, Arguments args) {
         checkIfAluOPCodeExists(opCode);
         ALU_OP_CODES.get(opCode)
-                    .checkIfArgumentsMatchRequiredCount(arg1, arg2);
+                    .checkIfArgumentsMatchRequiredCount(args);
 
         return ALU_OP_CODES.get(opCode)
                            .getOperation()
-                           .apply(arg1, arg2);
-    }
-
-    /**
-     * Reloaded method with second argument empty.
-     *
-     * @param opCode specifies which operation should be performed
-     * @param arg1   value of argument. Shouldn't be null
-     * @return result of operation or null if operation doesn't return anything
-     */
-    Integer compute(int opCode, Integer arg1) {
-        return compute(opCode, arg1, null);
+                           .apply(args.arg1, args.arg2);
     }
 
     /**
@@ -108,17 +99,27 @@ public final class ALU {
      *
      * @return registers contained in this ALU
      */
-    Registers getRegisters() {
+    public Registers getRegisters() {
         return registers;
     }
 
     /**
-     * Sets specifed registers value.
+     * Sets specified registers value.
      *
      * @param address address of modified register
      * @param value   new value of register
      */
-    void setRegister(int address, int value) {
+    public void setRegister(int address, int value) {
         this.registers.write(address, value);
+    }
+
+    /**
+     * Gets AlU OP codes.
+     *
+     * @return ArrayList of OP codes
+     */
+    @Override
+    public ArrayList<OpCode> getOpCodes() {
+        return ALU_OP_CODES;
     }
 }

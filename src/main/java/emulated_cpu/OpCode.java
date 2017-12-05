@@ -1,5 +1,6 @@
 package emulated_cpu;
 
+
 import java.util.function.BinaryOperator;
 
 /**
@@ -18,14 +19,10 @@ public class OpCode {
     /**
      * Checks if passed arguments match required argument count for this OP code.
      *
-     * @param arg1 first argument
-     * @param arg2 second argument
+     * @param args object of arguments
      */
-    public void checkIfArgumentsMatchRequiredCount(Integer arg1, Integer arg2) {
-        int argumentCount = 0;
-        if (arg1 != null) argumentCount++;
-        if (arg2 != null) argumentCount++;
-        if (requiredArguments != argumentCount)
+    public void checkIfArgumentsMatchRequiredCount(Arguments args) {
+        if (requiredArguments != args.getArgumentsCount())
             throw new IllegalArgumentException("Passed arguments don't match arguments count for OP code");
     }
 
