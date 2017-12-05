@@ -20,7 +20,7 @@ public final class ALU implements OperatingUnit {
         new OpCode((x, y) -> ++x, 1),   //INC
         new OpCode((x, y) -> --x, 1),   //DEC
         new OpCode((x, y) -> x + y, 2), //ADD
-        new OpCode((x, y) -> x - y, 2), //DEC
+        new OpCode((x, y) -> x - y, 2), //SUB
         new OpCode((x, y) -> x * y, 2), //MUL
         new OpCode((x, y) -> x / y, 2), //DIV
         new OpCode((x, y) -> x & y, 2), //AND
@@ -28,7 +28,7 @@ public final class ALU implements OperatingUnit {
         new OpCode((x, y) -> x ^ y, 2), //XOR
         new OpCode((x, y) -> ~x, 1),    //NOT
         new OpCode((x, y) -> x >> y, 2),//RSHFT
-        new OpCode((x, y) -> x >> y, 2),//LSHFT
+        new OpCode((x, y) -> x << y, 2),//LSHFT
         new OpCode((x, y) -> {                          //CMP
             int diff = x - y;
             registers.getStatusRegister()
