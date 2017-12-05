@@ -9,6 +9,9 @@ import emulated_cpu.cpu.memory.Memory;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * CU class is used to control flow of the program.
+ */
 public class CU implements OperatingUnit {
     public int instructionPointer = 0;
     private boolean stopped = false;

@@ -7,6 +7,9 @@ import emulated_cpu.cpu.memory.Memory;
 
 import java.util.Optional;
 
+/**
+ * Command is a class which is used to contain single command (OP code, addressing modes, operands).
+ */
 public class Command {
     private ALU alu;
     private CU cu;
@@ -18,6 +21,12 @@ public class Command {
     private Integer firstValueAddress, secondValueAddress;
     private Integer firstValue, secondValue;
 
+    /**
+     * Creates new Command with specified CU and ALU.
+     *
+     * @param alu ALU used in CPU
+     * @param cu  CU used in CPU
+     */
     public Command(ALU alu, CU cu) {
         this.alu = alu;
         this.cu = cu;
@@ -31,6 +40,11 @@ public class Command {
         secondAddressType = getProperIOInterfaceFromAddressType(secondAddressTypeIndex);
     }
 
+    /**
+     * Gets next OP code, fetches its arguments, then it applies them in appropriate unit (CU or ALU).
+     *
+     * @return value of arguments modified by OP code.
+     */
     public Integer fetchAndExecuteNextInstruction() {
         OperatingUnit unit = getOperatingUnitFromCurrentOpCode();
         opCodeAddress = adaptOpCodeIndexToOperatingUnit();
@@ -60,31 +74,40 @@ public class Command {
         return unit.execute(opCodeAddress, new Arguments(firstValue, secondValue));
     }
 
+    /**
+     * Gets address type of first argument.
+     *
+     * @return IOInterface as address type
+     */
     public IOInterface getFirstAddressType() {
         return firstAddressType;
     }
 
-    public IOInterface getSecondAddressType() {
-        return secondAddressType;
-    }
-
-    public Integer getFirstValue() {
-        return firstValue;
-    }
-
-    public Integer getSecondValue() {
-        return secondValue;
-    }
-
+    /**
+     * Gets address of first argument.
+     *
+     * @return int which shows index of argument
+     */
     public Integer getFirstValueAddress() {
         return firstValueAddress;
     }
 
+    /**
+     * Reads next value from memory and increments IP.
+     *
+     * @return value read from memory
+     */
     private int getNextValueFromMemory() {
         return memory
             .read(cu.instructionPointer++);
     }
 
+    /**
+     * Gets appropriate IOInterface depending on address type passed.
+     *
+     * @param addressType index of each type
+     * @return IOInterface which is memory type of given address
+     */
     private IOInterface getProperIOInterfaceFromAddressType(int addressType) {
         switch (addressType) {
             case 0:
@@ -98,6 +121,11 @@ public class Command {
         }
     }
 
+    /**
+     * Adjust OP code index to match ALU's or CU's OP code.
+     *
+     * @return OP code index
+     */
     private int adaptOpCodeIndexToOperatingUnit() {
         return opCodeAddress < cu.getOpCodes()
                                  .size() ?
@@ -106,6 +134,11 @@ public class Command {
                               .size();
     }
 
+    /**
+     * Gets CU or ALU depending on which OP code we want to use.
+     *
+     * @return Operating Unit - ALU or CU
+     */
     private OperatingUnit getOperatingUnitFromCurrentOpCode() {
         return opCodeAddress < cu.getOpCodes()
                                  .size() ? cu : alu;
