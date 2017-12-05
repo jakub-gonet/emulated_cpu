@@ -12,7 +12,8 @@ import java.util.Optional;
 
 public class CPU {
     private ALU alu = new ALU();
-    private CU cu = new CU();
+    private CU cu = new CU(alu.getRegisters()
+                              .getStatusRegister());
     private Memory memory = Memory.getInstance();
 
     public CPU(ArrayList<Integer> program) {
@@ -27,10 +28,32 @@ public class CPU {
         }
     }
 
+    public void restart() {
+        for (int i = 0; i < alu.getRegisters()
+                               .size(); i++) {
+            alu.getRegisters()
+               .write(i, 0);
+        }
+
+        cu.instructionPointer = 0;
+    }
+
+    public void loadNewProgram(ArrayList<Integer> program) {
+        memory.setMemory(program);
+    }
+
     private void writeToIOInterface(Integer value, Command command) {
         IOInterface writingAddressType = Optional.ofNullable(command.getFirstAddressType())
                                                  .orElseThrow(() -> new IllegalArgumentException("Address type can't be const value"));
         writingAddressType.write(command.getFirstValueAddress(), value);
+    }
+
+    public boolean isStopped() {
+        return cu.isStopped();
+    }
+
+    public int getInstructionPointer() {
+        return cu.instructionPointer;
     }
 
     public Memory getMemory() {
