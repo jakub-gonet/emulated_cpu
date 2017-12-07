@@ -55,7 +55,7 @@ public final class ALU implements OperatingUnit {
      *
      * @param registerNumber number of registers, can't be negative, with 0 value only StatusRegister is created.
      */
-    ALU(int registerNumber) {
+    public ALU(int registerNumber) {
         registers = new Registers(registerNumber);
     }
 

@@ -14,9 +14,8 @@ import java.util.Optional;
  * CPU is main class for this project, represents a processor.
  */
 public class CPU {
-    private ALU alu = new ALU();
-    private CU cu = new CU(alu.getRegisters()
-                              .getStatusRegister());
+    private ALU alu;
+    private CU cu;
     private Memory memory = Memory.getInstance();
 
     /**
@@ -24,8 +23,18 @@ public class CPU {
      *
      * @param program program which will be executed
      */
+    public CPU(ArrayList<Integer> program, int registerCount) {
+        memory.setMemory(program);
+        this.alu = new ALU(registerCount);
+        this.cu = new CU(alu.getRegisters()
+                            .getStatusRegister());
+    }
+
     public CPU(ArrayList<Integer> program) {
         memory.setMemory(program);
+        this.alu = new ALU();
+        this.cu = new CU(alu.getRegisters()
+                            .getStatusRegister());
     }
 
     /**
