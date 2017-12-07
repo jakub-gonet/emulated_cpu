@@ -36,9 +36,9 @@ public class Command {
         this.memoryAddressInRegister = new MemoryAddressInRegister(alu.getRegisters());
 
         int opCodeAndAddressTypes = getNextValueFromMemory();
-        this.opCodeAddress = opCodeAndAddressTypes >> 4;
-        this.firstAddressTypeIndex = (opCodeAndAddressTypes >> 2) & 0x3;
-        this.secondAddressTypeIndex = opCodeAndAddressTypes & 0x3;
+        this.opCodeAddress = opCodeAndAddressTypes >> 6;
+        this.firstAddressTypeIndex = (opCodeAndAddressTypes >> 3) & 0x7;
+        this.secondAddressTypeIndex = opCodeAndAddressTypes & 0x7;
 
         firstAddressType = getProperIOInterfaceFromAddressType(firstAddressTypeIndex);
         secondAddressType = getProperIOInterfaceFromAddressType(secondAddressTypeIndex);
