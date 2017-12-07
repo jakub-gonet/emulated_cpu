@@ -4,6 +4,7 @@ import emulated_cpu.cpu.alu.ALU;
 import emulated_cpu.cpu.cu.CU;
 import emulated_cpu.cpu.memory.IOInterface;
 import emulated_cpu.cpu.memory.Memory;
+import emulated_cpu.cpu.memory.MemoryAddressInRegister;
 
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import java.util.Optional;
 public class Command {
     private ALU alu;
     private CU cu;
+    private MemoryAddressInRegister memoryAddressInRegister;
+
     private Memory memory = Memory.getInstance();
     private int opCodeAddress;
     private int firstAddressTypeIndex, secondAddressTypeIndex;
@@ -30,6 +33,7 @@ public class Command {
     public Command(ALU alu, CU cu) {
         this.alu = alu;
         this.cu = cu;
+        this.memoryAddressInRegister = new MemoryAddressInRegister(alu.getRegisters());
 
         int opCodeAndAddressTypes = getNextValueFromMemory();
         this.opCodeAddress = opCodeAndAddressTypes >> 4;
@@ -116,6 +120,8 @@ public class Command {
                 return alu.getRegisters();
             case 2:
                 return Memory.getInstance();
+            case 3:
+                return memoryAddressInRegister;
             default:
                 throw new IllegalArgumentException("Addressing mode doesn't exist");
         }
