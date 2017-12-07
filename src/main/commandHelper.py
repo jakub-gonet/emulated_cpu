@@ -56,7 +56,8 @@ OPCodes_old = [
 ADDR_TYPE = [
     "CONST",
     "REG",
-    "ADDR"
+    "ADDR",
+    "ADDR_IN_REGISTER"
 ]
 
 options = [
