@@ -3,9 +3,3 @@
 
 ## Description
 Simple RISC CPU emulator in Java. Not based on existing CPU, just to be clear.
-
-## TODO
-* add stack support
-* add interrupts
-* add logger
-* add assembler
