@@ -1,7 +1,7 @@
 package emulated_cpu;
 
 /**
- * Arguments class is used to wrap OP codes arguments into object.
+ * Arguments class is used as OP codes wrapper.
  */
 public class Arguments {
 

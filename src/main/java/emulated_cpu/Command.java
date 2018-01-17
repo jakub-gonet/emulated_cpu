@@ -123,7 +123,7 @@ public class Command {
             case 3:
                 return memoryAddressInRegister;
             default:
-                throw new IllegalArgumentException("Addressing mode doesn't exist");
+                throw new IllegalArgumentException("Addressing mode " + addressType + " doesn't exist");
         }
     }
 
