@@ -1,6 +1,8 @@
 package emulated_cpu.cpu.alu;
 
 import emulated_cpu.cpu.memory.IOInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,8 @@ import java.util.ArrayList;
  * First register is used as status register and shouldn't be used as general purpose register.
  */
 public class Registers implements IOInterface {
+    private Logger logger = LogManager.getLogger(Registers.class);
+
     private ArrayList<Register> registers;
 
     public static final int defaultRegistersNumber = 7;
@@ -53,8 +57,10 @@ public class Registers implements IOInterface {
      */
     @Override
     public int read(int address) {
-        return registers.get(address)
-                        .getValue();
+        int value = registers.get(address)
+                             .getValue();
+        logger.trace("Reading {} from register {}", value, address);
+        return value;
     }
 
     /**
@@ -67,10 +73,10 @@ public class Registers implements IOInterface {
      */
     @Override
     public void write(int address, int data) {
-        /* TODO Disabled while no logger is added
         if (address == 0)
-            System.err.println("Did you mean to overwrite status register?");
-         */
+            logger.warn("Did you mean to overwrite status register?");
+
+        logger.trace("Writing {} to register {}", data, address);
         registers.get(address)
                  .setValue(data);
     }

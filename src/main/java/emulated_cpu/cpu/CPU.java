@@ -6,6 +6,8 @@ import emulated_cpu.cpu.alu.Registers;
 import emulated_cpu.cpu.cu.CU;
 import emulated_cpu.cpu.memory.IOInterface;
 import emulated_cpu.cpu.memory.Memory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import java.util.Optional;
  * CPU is main class for this project, represents a processor.
  */
 public class CPU {
+    private Logger logger = LogManager.getLogger(CPU.class);
     private ALU alu;
     private CU cu;
     private Memory memory = Memory.getInstance();
@@ -38,6 +41,19 @@ public class CPU {
     }
 
     /**
+     * Executes operations until HLT opcode is spotted. Can lead to infinite loops.
+     */
+    void executeOperationsUntilHLT() {
+        int count = 0;
+        logger.info("Starting program...");
+        while (!isStopped()) {
+            executeNextOperation();
+            count++;
+        }
+        logger.info("Performed {} CPU operations", count);
+    }
+
+    /**
      * Fetches and executes next instruction from program memory.
      */
     void executeNextOperation() {
@@ -59,6 +75,7 @@ public class CPU {
         }
 
         cu.instructionPointer = 0;
+        logger.info("Restarted the CPU");
     }
 
     /**
@@ -69,6 +86,7 @@ public class CPU {
     public void loadNewProgram(ArrayList<Integer> program) {
         memory.setMemory(program);
         restart();
+        logger.info("Loaded new program into CPU");
     }
 
     /**

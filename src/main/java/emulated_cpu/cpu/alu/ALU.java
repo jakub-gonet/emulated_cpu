@@ -3,6 +3,8 @@ package emulated_cpu.cpu.alu;
 import emulated_cpu.Arguments;
 import emulated_cpu.OpCode;
 import emulated_cpu.OperatingUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.Arrays;
  * ALU class is used with CU class to perform all mathematical operations.
  */
 public final class ALU implements OperatingUnit {
+    private Logger logger = LogManager.getLogger(ALU.class);
     private Registers registers;
 
     /**
@@ -79,9 +82,11 @@ public final class ALU implements OperatingUnit {
         ALU_OP_CODES.get(opCode)
                     .checkIfArgumentsMatchRequiredCount(args);
 
-        return ALU_OP_CODES.get(opCode)
-                           .getOperation()
-                           .apply(args.arg1, args.arg2);
+        Integer value = ALU_OP_CODES.get(opCode)
+                                    .getOperation()
+                                    .apply(args.arg1, args.arg2);
+        logger.debug("Executed 0x{} ALU opcode, got {} in result", Integer.toHexString(opCode), value);
+        return value;
     }
 
     /**
@@ -90,8 +95,10 @@ public final class ALU implements OperatingUnit {
      * @param opCode OP code to be checked
      */
     private void checkIfAluOPCodeExists(int opCode) {
-        if (opCode >= ALU_OP_CODES.size())
+        if (opCode >= ALU_OP_CODES.size()) {
+            logger.error("ALU OP code {} doesn't exist", opCode);
             throw new IndexOutOfBoundsException("OP code " + opCode + " doesn't exist");
+        }
     }
 
     /**

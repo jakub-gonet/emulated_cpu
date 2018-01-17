@@ -1,5 +1,8 @@
 package emulated_cpu.cpu.memory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,8 @@ import java.util.List;
  * Memory is a class containing program memory. This memory is used to store program, variables and stack.
  */
 public class Memory implements IOInterface {
+    private Logger logger = LogManager.getLogger(Memory.class);
+
     private static Memory instance;
 
     private List<Integer> memory;
@@ -59,7 +64,9 @@ public class Memory implements IOInterface {
      */
     @Override
     public int read(int address) {
-        return memory.get(address);
+        int value = memory.get(address);
+        logger.trace("Reading {} from memory address {}", value, address);
+        return value;
     }
 
     /**
@@ -71,6 +78,7 @@ public class Memory implements IOInterface {
      */
     @Override
     public void write(int address, int data) {
+        logger.trace("Writing {} to memory address {}", data, address);
         memory.set(address, data);
     }
 
