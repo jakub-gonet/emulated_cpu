@@ -1,9 +1,9 @@
-#---------Intellij IDEA---------
+#====> Intellij IDEA <====#
 .idea
 /out
 *.iml
 
-#---------Java---------
+#====> Java <====#
 
 # Compiled class file
 *.class
@@ -15,9 +15,12 @@
 *.jar
 *.war
 
-#---------Gradle---------
+#====> Gradle <====#
 .gradle
 /build
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache
+
+#====> Logger  <====#
+/log
