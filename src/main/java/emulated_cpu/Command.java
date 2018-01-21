@@ -18,7 +18,6 @@ public class Command {
 
     private Memory memory = Memory.getInstance();
     private int opCodeAddress;
-    private int firstAddressTypeIndex, secondAddressTypeIndex;
     private IOInterface firstAddressType, secondAddressType;
 
     private Integer firstValueAddress, secondValueAddress;
@@ -37,8 +36,8 @@ public class Command {
 
         int opCodeAndAddressTypes = getNextValueFromMemory();
         this.opCodeAddress = opCodeAndAddressTypes >> 6;
-        this.firstAddressTypeIndex = (opCodeAndAddressTypes >> 3) & 0x7;
-        this.secondAddressTypeIndex = opCodeAndAddressTypes & 0x7;
+        int firstAddressTypeIndex = (opCodeAndAddressTypes >> 3) & 0x7;
+        int secondAddressTypeIndex = opCodeAndAddressTypes & 0x7;
 
         firstAddressType = getProperIOInterfaceFromAddressType(firstAddressTypeIndex);
         secondAddressType = getProperIOInterfaceFromAddressType(secondAddressTypeIndex);
