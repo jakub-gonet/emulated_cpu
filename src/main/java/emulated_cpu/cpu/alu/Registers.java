@@ -90,6 +90,9 @@ public class Registers implements IOInterface {
         return (StatusRegister) registers.get(0);
     }
 
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
 
     @Override
     public String toString() {
