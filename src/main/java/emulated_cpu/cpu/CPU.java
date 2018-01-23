@@ -24,13 +24,15 @@ public class CPU {
     /**
      * Create new CPU object with specified program.
      *
-     * @param program program which will be executed
+     * @param program       program which will be executed
+     * @param registerCount specifies how many registers should be available
+     * @param stackSize     specifies how big stack should be
      */
-    public CPU(ArrayList<Integer> program, int registerCount) {
+    public CPU(ArrayList<Integer> program, int registerCount, int stackSize) {
         memory.setMemory(program);
         this.alu = new ALU(registerCount);
         this.cu = new CU(alu.getRegisters()
-                            .getStatusRegister());
+                            .getStatusRegister(), stackSize);
     }
 
     public CPU(ArrayList<Integer> program) {

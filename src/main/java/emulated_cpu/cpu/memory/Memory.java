@@ -40,7 +40,7 @@ public class Memory implements IOInterface {
      */
     public void setMemory(List<Integer> memory) {
         if (memory == null)
-            throw new NullPointerException("Memory object can't be null.");
+            throw new NullPointerException("Memory object can't be null");
 
         this.memory = new ArrayList<>(memory);
     }

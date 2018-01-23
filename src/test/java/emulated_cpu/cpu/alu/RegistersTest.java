@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -53,13 +51,10 @@ class RegistersTest {
     @Test
     void write_butWritingToAddressRegister() {
         Registers r = new Registers(1);
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(outContent));
 
         r.write(0, 5);
 
-        Assertions.assertEquals("Did you mean to overwrite status register?", outContent.toString()
-                                                                                        .trim());
+        Assertions.assertEquals("Did you mean to overwrite status register?", "");
     }
 
 
