@@ -13,6 +13,8 @@ OPCodes = [
     {"name": "JLE", "requiredArgs": 1},
     {"name": "JG", "requiredArgs": 1},
     {"name": "JGE", "requiredArgs": 1},
+    {"name": "PUSH", "requiredArgs": 1},
+    {"name": "POP", "requiredArgs": 0},
     {"name": "INC", "requiredArgs": 1},
     {"name": "DEC", "requiredArgs": 1},
     {"name": "ADD", "requiredArgs": 2},

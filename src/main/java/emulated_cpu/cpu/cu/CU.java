@@ -5,6 +5,7 @@ import emulated_cpu.OpCode;
 import emulated_cpu.OperatingUnit;
 import emulated_cpu.cpu.alu.StatusRegister;
 import emulated_cpu.cpu.memory.Memory;
+import emulated_cpu.cpu.memory.Stack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +22,7 @@ public class CU implements OperatingUnit {
     private boolean stopped = false;
     private StatusRegister statusRegister;
     private Memory memory = Memory.getInstance();
+    private Stack stack;
 
     private final ArrayList<OpCode> CU_OP_CODES = new ArrayList<>(Arrays.asList(
         new OpCode((x, y) -> null, 0),  //NOP
@@ -100,16 +102,28 @@ public class CU implements OperatingUnit {
                 || statusRegister.getCarryFlagState())
                 instructionPointer = x;
             return null;
-        }, 1)
+        }, 1),
+        new OpCode((x, y) -> {                         //PUSH
+            stack.push(x);
+            return null;
+        }, 1),
+        new OpCode((x, y) -> stack.pop(), 1) //POP
     ));
 
     /**
      * Creates new ControlUnit with specified StatusRegister (to be read by OP codes).
      *
      * @param statusRegister StatusRegister which is checked
+     * @param stackSize      size of created stack
      */
+    public CU(StatusRegister statusRegister, int stackSize) {
+        this.statusRegister = statusRegister;
+        this.stack = new Stack(stackSize);
+    }
+
     public CU(StatusRegister statusRegister) {
         this.statusRegister = statusRegister;
+        this.stack = new Stack();
     }
 
     /**
