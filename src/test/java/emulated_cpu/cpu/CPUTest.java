@@ -99,7 +99,7 @@ class CPUTest {
 
         cpu.executeNextOperation();
         Assertions.assertEquals(5, cpu.getAluRegisters()
-                                        .read(1));
+                                      .read(1));
     }
 
     @Test
@@ -111,7 +111,7 @@ class CPUTest {
 
         cpu.executeNextOperation();
         Assertions.assertEquals(81, cpu.getMemory()
-                                         .read(1));
+                                       .read(1));
     }
 
     @Test
@@ -189,7 +189,7 @@ class CPUTest {
 
         cpu.executeNextOperation();
         Assertions.assertEquals(1, cpu.getAluRegisters()
-                                        .read(1));
+                                      .read(1));
     }
 
     @Test
@@ -211,7 +211,7 @@ class CPUTest {
 
         cpu.executeNextOperation();
         Assertions.assertEquals(0x291, cpu.getMemory()
-                                         .read(0));
+                                          .read(0));
     }
 
     @Test
@@ -286,12 +286,30 @@ class CPUTest {
         System.out.println(cpu.getMemory());
     }
 
+    @Test
+    void executeNextOperation_pushAndPop() {
+        CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
+            136, 1, 17, 648, 1, 136, 1, 1, 648, 1, 136, 1, 3, 648, 1, 192, 18, 64, 712, 1, 712, 2, 905, 1, 2, 712, 3, 200, 3
+        )));
+
+        while (!cpu.isStopped()) cpu.executeNextOperation();
+
+        System.out.println(cpu.getAluRegisters());
+        System.out.println(cpu.getMemory());
+    }
+
     @Disabled
     @Test
     void executeNextOperation_bubbleSort() {
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-
-        )), 7);
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 144, 0, 5, 144,
+            1, 3, 144, 2, 7, 144, 3, 9, 144, 4, 1, 146, 5,
+            0, 146, 6, 1, 146, 7, 2, 146, 8, 3, 146, 9, 4,
+            136, 1, 5, 136, 2, 5, 137, 3, 1, 777, 3, 2, 137,
+            4, 1, 137, 5, 1, 137, 6, 5, 648, 5, 1435, 6, 5, 512,
+            85, 648, 5, 648, 6, 1417, 5, 3, 384, 63, 648, 4, 1417,
+            4, 3, 384, 55, 64, 139, 7, 6, 155, 6, 5, 153, 5, 7, 192, 68
+        )), 7, 0);
 
         while (!cpu.isStopped()) cpu.executeNextOperation();
         System.out.println(cpu.getAluRegisters());
