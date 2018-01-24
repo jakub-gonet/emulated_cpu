@@ -298,6 +298,42 @@ class CPUTest {
         System.out.println(cpu.getMemory());
     }
 
+
+    @Test
+    void executeNextOperation_callAddFunction() {
+        /*
+        MOV [2], 8
+        MOV [3], 6
+
+        PUSH [2]
+        PUSH [3]
+
+        CALL add
+
+        HLT
+
+        add:
+            POP [1]
+            POP [2]
+            POP [3]
+
+            ADD [2], [3]
+
+            JMP [1]
+        */
+        CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
+            136, 2, 8, 136, 3, 6, 648, 2, 648, 3, 768, 13, 64, 712, 1, 712, 2, 712, 3, 969, 2, 3, 200, 1
+        )));
+
+        while (!cpu.isStopped()) cpu.executeNextOperation();
+
+        System.out.println(cpu.getAluRegisters());
+        System.out.println(cpu.getMemory());
+        Assertions.assertEquals(14, cpu.getAluRegisters()
+                                       .read(2));
+
+    }
+
     @Disabled
     @Test
     void executeNextOperation_bubbleSort() {
