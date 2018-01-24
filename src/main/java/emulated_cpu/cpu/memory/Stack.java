@@ -42,6 +42,10 @@ public class Stack {
               .set(stackPointer--, value);
     }
 
+    public int getStackPointer(){
+        return stackPointer;
+    }
+
     private void checkValidityOfStackPointerPosition(int stackPointer) {
         if (stackPointer < memory.getMemory()
                                  .size() - size - 1) {
