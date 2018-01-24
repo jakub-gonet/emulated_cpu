@@ -107,7 +107,12 @@ public class CU implements OperatingUnit {
             stack.push(x);
             return null;
         }, 1),
-        new OpCode((x, y) -> stack.pop(), 1) //POP
+        new OpCode((x, y) -> stack.pop(), 1), //POP
+        new OpCode((x, y) -> {                            //CALL
+            stack.push(instructionPointer);
+            instructionPointer = x;
+            return null;
+        }, 1)
     ));
 
     /**
