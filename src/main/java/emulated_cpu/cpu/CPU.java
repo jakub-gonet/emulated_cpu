@@ -76,6 +76,7 @@ public class CPU {
                .write(i, 0);
         }
 
+        cu.setStopped(false);
         cu.instructionPointer = 0;
         logger.info("Restarted the CPU");
     }

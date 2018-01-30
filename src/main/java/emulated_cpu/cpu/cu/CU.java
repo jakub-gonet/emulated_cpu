@@ -178,4 +178,8 @@ public class CU implements OperatingUnit {
     public boolean isStopped() {
         return stopped;
     }
+
+    public void setStopped(boolean isStopped){
+        stopped = isStopped;
+    }
 }
