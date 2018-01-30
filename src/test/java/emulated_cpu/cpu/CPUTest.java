@@ -1,21 +1,20 @@
 package emulated_cpu.cpu;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 class CPUTest {
     @Test
-    void executeNextOperation_noOperation() {
+    void noOperation() {
+        /*
+        NOP
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x0
-            //NOP
         )));
 
         cpu.executeNextOperation();
@@ -23,10 +22,13 @@ class CPUTest {
 
 
     @Test
-    void executeNextOperation_halt() {
+    void halt() {
+        /*
+        HLT
+        */
+
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x40
-            //HLT
         )));
 
         cpu.executeNextOperation();
@@ -34,10 +36,12 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_jumpConstArg() {
+    void jumpToConstValue() {
+        /*
+        JMP 0
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0xc0, 0
-            //JMP 0
         )));
 
         cpu.executeNextOperation();
@@ -45,56 +49,49 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_jumpLessEqualsRegArg() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    void jumpToAddressStoredInRegister() {
+        /*
+        MOV [1], 3
+        JMP &[1]
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x88, 1, 3, 0x1c8, 1
-            //JMP [1]
+            0x88, 1, 3, 0xc8, 1
         )));
-
-        Method setZeroFlagStateMethod = cpu.getAluRegisters()
-                                           .getStatusRegister()
-                                           .getClass()
-                                           .getDeclaredMethod("setZeroFlagState", boolean.class);
-        setZeroFlagStateMethod.setAccessible(true);
-        setZeroFlagStateMethod.invoke(cpu.getAluRegisters()
-                                         .getStatusRegister(), true);
-
-
-        Method setNegativeFlagStateMethod = cpu.getAluRegisters()
-                                               .getStatusRegister()
-                                               .getClass()
-                                               .getDeclaredMethod("setNegativeFlagState", boolean.class);
-        setZeroFlagStateMethod.setAccessible(true);
-        setZeroFlagStateMethod.invoke(cpu.getAluRegisters()
-                                         .getStatusRegister(), true);
-
-
+        cpu.executeNextOperation();
         cpu.executeNextOperation();
         Assertions.assertEquals(3, cpu.getInstructionPointer());
     }
 
     @Test
-    void executeNextOperation_butJumpConstOutOfMemoryBounds() {
+    void jumpOutOfMemoryBounds() {
+        /*
+        JMP &-1
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0xc0, -1
-            //JMP -1
+            0xd0, -1
         )));
 
-        Assertions.assertThrows(IllegalArgumentException.class, cpu::executeNextOperation);
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, cpu::executeNextOperation);
 
-        cpu.restart();
-        cpu.loadNewProgram(new ArrayList<>(Arrays.asList(
-            0xc0, 3
-            //JMP 3
+        //==============================================
+
+        /*
+        JMP &3
+        */
+        cpu = new CPU(new ArrayList<>(Arrays.asList(
+            0xd0, 3
         )));
-        Assertions.assertThrows(IllegalArgumentException.class, cpu::executeNextOperation);
+        cpu.executeNextOperation();
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, cpu::executeNextOperation);
     }
 
     @Test
-    void executeNextOperation_moveValueToRegister() {
+    void moveValueToRegister() {
+        /*
+        MOV [1], 5
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x88, 1, 5
-            //MOV [1] 5
         )));
 
         cpu.executeNextOperation();
@@ -103,10 +100,12 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_moveValueToMemory() {
+    void moveValueToMemory() {
+        /*
+        MOV &1, 81
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x90, 1, 81
-            //MOV &1 5
         )));
 
         cpu.executeNextOperation();
@@ -115,35 +114,42 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_moveRegisterToMemoryAddressStoredInRegister() {
+    void moveRegisterToMemoryAddressStoredInRegister() {
+        /*
+        MOV [1] 50
+        MOV [2] 3
+        MOV &[2] [1]
+        HLT
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x88, 1, 50, 0x88, 2, 3, 0x99, 2, 1, 0x40
-            //MOV [1] 50
-            //MOV [2] 3
-            //MOV &[2] [1]
         )));
 
-        while (!cpu.isStopped()) cpu.executeNextOperation();
+        cpu.executeOperationsUntilHLT();
         Assertions.assertEquals(50, cpu.getMemory()
                                        .read(3));
     }
 
     @Test
-    void executeNextOperation_butMoveValueToConst() {
+    void moveConstValueToConst() {
+        /*
+        MOV 1, 16
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x80, 1, 16
-            //MOV 1 16
         )));
 
         Assertions.assertThrows(IllegalArgumentException.class, cpu::executeNextOperation);
     }
 
     @Test
-    void executeNextOperation_compareRegisterAndConst() {
+    void compareRegisterAndConst() {
+        /*
+        MOV [1], 8
+        CMP [1], 5
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x88, 1, 8, 0x588, 1, 5
-            //MOV [1] 8
-            //CMP [1] 5
+            0x88, 1, 8, 0x648, 1, 5
         )));
         cpu.executeNextOperation();
         cpu.executeNextOperation();
@@ -151,12 +157,14 @@ class CPUTest {
         Assertions.assertTrue(cpu.getAluRegisters()
                                  .getStatusRegister()
                                  .getCarryFlagState());
+        //==============================================
 
-        cpu.restart();
-        cpu.loadNewProgram(new ArrayList<>(Arrays.asList(
-            0x88, 1, -3, 0x588, 1, 0
-            //MOV [1] -3
-            //CMP [1] 0
+        /*
+        MOV [1], -3
+        CMP [1], 0
+        */
+        cpu = new CPU(new ArrayList<>(Arrays.asList(
+            0x88, 1, -3, 0x648, 1, 0
         )));
         cpu.executeNextOperation();
         cpu.executeNextOperation();
@@ -165,11 +173,14 @@ class CPUTest {
                                  .getStatusRegister()
                                  .getNegativeFlagState());
 
-        cpu.restart();
-        cpu.loadNewProgram(new ArrayList<>(Arrays.asList(
-            0x88, 1, 7, 0x588, 1, 7
-            //MOV [1] 7
-            //CMP [1] 7
+        //==============================================
+
+        /*
+        MOV [1], 7
+        CMP [1], 7
+        */
+        cpu = new CPU(new ArrayList<>(Arrays.asList(
+            0x88, 1, 7, 0x648, 1, 7
         )));
         cpu.executeNextOperation();
         cpu.executeNextOperation();
@@ -181,10 +192,12 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_incrementRegister() {
+    void incrementRegister() {
+        /*
+        INC [1]
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x288, 1
-            //INC [1]
+            0x348, 1
         )));
 
         cpu.executeNextOperation();
@@ -193,32 +206,38 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_butIncrementConst() {
+    void IncrementConst() {
+        /*
+        INC 1
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x280, 1
-            //INC 1
+            0x340, 1
         )));
         Assertions.assertThrows(IllegalArgumentException.class, cpu::executeNextOperation);
 
     }
 
     @Test
-    void executeNextOperation_incrementMemory() {
+    void incrementMemory() {
+        /*
+        INC &0
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x290, 0
-            //INC &0
+            0x350, 0
         )));
 
         cpu.executeNextOperation();
-        Assertions.assertEquals(0x291, cpu.getMemory()
+        Assertions.assertEquals(0x351, cpu.getMemory()
                                           .read(0));
     }
 
     @Test
-    void executeNextOperation_butAndWithMissingOneArgument() {
+    void AndWithMissingOneArgument() {
+        /*
+        AND [1]
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x408, 1
-            //AND [1]
+            0x3c8, 1
         )));
         //reading outside of memory
         Assertions.assertThrows(IndexOutOfBoundsException.class, cpu::executeNextOperation);
@@ -226,81 +245,85 @@ class CPUTest {
 
 
     @Test
-    void executeNextOperation_calculateFactorialOf5() {
+    void calculateFactorialOf5() {
+        /*
+        MOV [1], 5
+        MOV [2], 1
+        loop:
+          CMP [1], 0
+          JLE hlt
+
+          MUL [2], [1]
+          DEC [1]
+
+          JMP loop
+
+         hlt:
+           HLT
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x88, 1, 5, //MOV [1] 5
-            0x88, 2, 1, //MOV [2] 1
-            0x588, 1, 0,  //loop: CMP [1] 0
-            0x1c0, 18,       //JLE hlt
-            0x389, 0x2, 0x1, //MUL [2] [1]
-            0x2c8, 0x1,      //DEC [1]
-            0xc0, 6,        //JMP loop
-            0x40            //hlt: HLT
+            136, 1, 5, 136, 2, 1, 1608,
+            1, 0, 448, 18, 1097, 2, 1,
+            904, 1, 192, 6, 64
         )));
 
-        while (!cpu.isStopped()) cpu.executeNextOperation();
-
+        cpu.executeOperationsUntilHLT();
         Assertions.assertEquals(120, cpu.getAluRegisters()
                                         .read(2));
     }
 
     @Test
-    void executeNextOperation_calculate20thFibonacciNumber() {
+    void calculate20thFibonacciNumber() {
+        /*
+        MOV [2], 0
+        MOV [3], 1
+        MOV [4], 20
+        loop:
+          CMP [4], 0
+          JE hlt
+
+          MOV [1], [3]
+          ADD [3], [2]
+          MOV [2], [1]
+
+          DEC [4]
+          JMP loop
+
+        hlt:
+          HLT
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x88, 2, 0, //MOV [2] 0
-            0x88, 3, 1, //MOV [3] 1
-            0x88, 4, 20, //MOV [4] 5
-            0x588, 4, 0,//loop(9): CMP [4] 0
-            0x100, 27,   //JE hlt
-            0x89, 1, 3, //MOV [1] [3]
-            0x309, 3, 2, //ADD [3] [2]
-            0x89, 2, 1, //MOV [2] [1]
-            0x2c8, 4,    //DEC [4]
-            0xc0, 9,    //JMP loop
-            0x40        //hlt(27): HLT
+            136, 2, 0, 136, 3, 1, 136, 4, 20, 1608,
+            4, 0, 256, 27, 137, 1, 3, 969, 3, 2, 137,
+            2, 1, 904, 4, 192, 9, 64
         )));
 
-        while (!cpu.isStopped()) cpu.executeNextOperation();
-
+        cpu.executeOperationsUntilHLT();
         Assertions.assertEquals(6765, cpu.getAluRegisters()
                                          .read(2));
     }
 
-    @Disabled
     @Test
-    void executeNextOperation_indirectAddressingMode() {
+    void pushAndPop() {
+        /*
+        MOV [1], 8
+        PUSH 6
+        POP [2]
+        ADD [1], [2]
+        HLT
+        */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            0x24, 1, 16,
-            0x24, 2, 17,
-            0x27, 3, 1,
-            0x2f, 1, 2,
-            0x2d, 2, 3,
-            0x10,
-            1,
-            2
+            136, 1, 8, 640, 6, 712, 2, 969, 1, 2, 64
         )));
 
-        while (!cpu.isStopped()) cpu.executeNextOperation();
-
-        System.out.println(cpu.getAluRegisters());
-        System.out.println(cpu.getMemory());
-    }
-
-    @Test
-    void executeNextOperation_pushAndPop() {
-        CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
-            136, 1, 17, 648, 1, 136, 1, 1, 648, 1, 136, 1, 3, 648, 1, 192, 18, 64, 712, 1, 712, 2, 905, 1, 2, 712, 3, 200, 3
-        )));
-
-        while (!cpu.isStopped()) cpu.executeNextOperation();
-
-        System.out.println(cpu.getAluRegisters());
-        System.out.println(cpu.getMemory());
+        cpu.executeOperationsUntilHLT();
+        Assertions.assertEquals(14, cpu.getAluRegisters()
+                                       .read(1));
     }
 
 
     @Test
-    void executeNextOperation_callAddFunction() {
+    void callAddFunction() {
         /*
         MOV [2], 8
         MOV [3], 6
@@ -325,30 +348,110 @@ class CPUTest {
             136, 2, 8, 136, 3, 6, 648, 2, 648, 3, 768, 13, 64, 712, 1, 712, 2, 712, 3, 969, 2, 3, 200, 1
         )));
 
-        while (!cpu.isStopped()) cpu.executeNextOperation();
-
-        System.out.println(cpu.getAluRegisters());
-        System.out.println(cpu.getMemory());
+        cpu.executeOperationsUntilHLT();
         Assertions.assertEquals(14, cpu.getAluRegisters()
                                        .read(2));
 
     }
 
-    @Disabled
     @Test
-    void executeNextOperation_bubbleSort() {
+    void bubbleSort() {
+        /*
+        NOP NOP NOP NOP NOP
+
+        NOP NOP NOP NOP NOP
+
+        # overwrite first 5 numbers in code and store values of an array there (indexes 0 -> 4)
+        MOV &0, 5
+        MOV &1, 3
+        MOV &2, 7
+        MOV &3, 9
+        MOV &4, 1
+
+        # store copy of the array next to it (indexes 5 -> 9)
+        MOV &5, &0
+        MOV &6, &1
+        MOV &7, &2
+        MOV &8, &3
+        MOV &9, &4
+
+        MOV [1], 5 # address of first value in the array
+        MOV [2], 5 # size of the array
+
+        # calculate last index
+        MOV [3], [1]
+        ADD [3], [2] # [3] <- [1] + [2]
+
+        #####
+        MOV [4], [1] # first loop index -> i = t[0]
+        main_loop:
+
+          MOV [5], [1]
+          MOV [6], [5]  # second loop index j-1
+          INC [5]       # second loop index j
+          ###
+          inner_loop:
+            CMP &[6], &[5]
+            JG swap
+
+        swapped:
+
+        INC [5]
+        INC [6]
+        CMP [5], [3]
+        JL inner_loop # loop while j < size of the array
+        ###
+
+        INC [4]
+        CMP [4], [3]
+        JL main_loop # loop while i < size of the array
+        #####
+        HLT
+
+        swap:
+          MOV [7], &[6]    # save old j-1 value
+          MOV &[6], &[5]   # swap j-1 with j
+          MOV &[5], [7]    # swap j with old j-1
+        JMP swapped
+        */
+
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 144, 0, 5, 144,
             1, 3, 144, 2, 7, 144, 3, 9, 144, 4, 1, 146, 5,
             0, 146, 6, 1, 146, 7, 2, 146, 8, 3, 146, 9, 4,
-            136, 1, 5, 136, 2, 5, 137, 3, 1, 777, 3, 2, 137,
-            4, 1, 137, 5, 1, 137, 6, 5, 648, 5, 1435, 6, 5, 512,
-            85, 648, 5, 648, 6, 1417, 5, 3, 384, 63, 648, 4, 1417,
+            136, 1, 5, 136, 2, 5, 137, 3, 1, 969, 3, 2, 137,
+            4, 1, 137, 5, 1, 137, 6, 5, 840, 5, 1627, 6, 5, 512,
+            85, 840, 5, 840, 6, 1609, 5, 3, 384, 63, 840, 4, 1609,
             4, 3, 384, 55, 64, 139, 7, 6, 155, 6, 5, 153, 5, 7, 192, 68
         )), 7, 0);
 
-        while (!cpu.isStopped()) cpu.executeNextOperation();
+        cpu.executeOperationsUntilHLT();
         System.out.println(cpu.getAluRegisters());
         System.out.println(cpu.getMemory());
+    }
+
+    @Test
+    void executeNextOperation_addEfficiency() {
+        /*
+        MOV [1], 0
+        loop:
+        CMP [1], 4096
+        JE end
+        INC [1]
+
+        JMP loop
+        end:
+        HLT
+        */
+        CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
+            136, 1, 0, 1608, 1, 4096, 256, 12, 840, 1, 192, 3, 64
+        )), 7, 0);
+        long start = System.currentTimeMillis();
+        while (!cpu.isStopped()) cpu.executeNextOperation();
+        long end = System.currentTimeMillis();
+        System.out.println("CPU was working " + (end - start) + "ms");
+
+        Assertions.assertEquals(4096, cpu.getAluRegisters()
+                                         .read(1));
     }
 }
