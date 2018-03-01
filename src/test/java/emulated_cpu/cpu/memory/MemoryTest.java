@@ -29,7 +29,7 @@ class MemoryTest {
         final Field field = m.getClass()
                              .getDeclaredField("memory");
         field.setAccessible(true);
-        field.set(m, new ArrayList<Integer>(Arrays.asList(5, 1, 23)));
+        field.set(m, new ArrayList<>(Arrays.asList(5, 1, 23)));
         Assertions.assertEquals(5, m.read(0));
     }
 
@@ -57,7 +57,7 @@ class MemoryTest {
         final Field field = m.getClass()
                              .getDeclaredField("memory");
         field.setAccessible(true);
-        field.set(m, new ArrayList<Integer>(Arrays.asList(null, 1, 23)));
+        field.set(m, new ArrayList<>(Arrays.asList(null, 1, 23)));
         Assertions.assertThrows(NullPointerException.class, () ->
             m.read(0));
     }
@@ -97,7 +97,7 @@ class MemoryTest {
     }
 
     @Test
-    void getMemory_butMemoryIsntSet() throws NoSuchFieldException {
+    void getMemory_butMemoryIsntSet() {
         Memory m = Memory.getInstance();
         Assertions.assertEquals(new ArrayList<Integer>(), m.getMemory());
     }
@@ -108,12 +108,12 @@ class MemoryTest {
         final Field field = m.getClass()
                              .getDeclaredField("memory");
         field.setAccessible(true);
-        field.set(m, new ArrayList<Integer>(Arrays.asList(0, 1, 23)));
+        field.set(m, new ArrayList<>(Arrays.asList(0, 1, 23)));
         m.write(0, 5);
         m.write(1, 10);
         m.write(2, 15);
 
-        Assertions.assertEquals(new ArrayList<Integer>(Arrays.asList(5, 10, 15)),
+        Assertions.assertEquals(new ArrayList<>(Arrays.asList(5, 10, 15)),
             field.get(m));
 
     }
@@ -125,7 +125,7 @@ class MemoryTest {
         final Field field = m.getClass()
                              .getDeclaredField("memory");
         field.setAccessible(true);
-        field.set(m, new ArrayList<Integer>(Arrays.asList(0, 1)));
+        field.set(m, new ArrayList<>(Arrays.asList(0, 1)));
 
         Assertions.assertThrows(IndexOutOfBoundsException.class, () ->
             m.write(-1, 5));

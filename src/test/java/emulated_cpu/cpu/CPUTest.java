@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 
 class CPUTest {
+
     @Test
     void noOperation() {
         /*
@@ -80,9 +81,8 @@ class CPUTest {
         */
         cpu = new CPU(new ArrayList<>(Arrays.asList(
             0xd0, 3
-        )));
-        cpu.executeNextOperation();
-        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, cpu::executeNextOperation);
+        )), 0, 0);
+        Assertions.assertThrows(IndexOutOfBoundsException.class, cpu::executeNextOperation);
     }
 
     @Test
@@ -238,7 +238,7 @@ class CPUTest {
         */
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             0x3c8, 1
-        )));
+        )), 0, 0);
         //reading outside of memory
         Assertions.assertThrows(IndexOutOfBoundsException.class, cpu::executeNextOperation);
     }
@@ -431,7 +431,7 @@ class CPUTest {
     }
 
     @Test
-    void executeNextOperation_addEfficiency() {
+    void incrementTo4096LotsOfTimes() {
         /*
         MOV [1], 0
         loop:
@@ -446,10 +446,21 @@ class CPUTest {
         CPU cpu = new CPU(new ArrayList<>(Arrays.asList(
             136, 1, 0, 1608, 1, 4096, 256, 12, 840, 1, 192, 3, 64
         )), 7, 0);
-        long start = System.currentTimeMillis();
-        while (!cpu.isStopped()) cpu.executeNextOperation();
-        long end = System.currentTimeMillis();
-        System.out.println("CPU was working " + (end - start) + "ms");
+        ArrayList<Long> timesOfExecution = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            cpu.restart();
+            long start = System.currentTimeMillis();
+            cpu.executeOperationsUntilHLT();
+            long end = System.currentTimeMillis();
+
+            timesOfExecution.add(end - start);
+        }
+
+
+        System.out.println("CPU was working " + timesOfExecution.stream()
+                                                                .mapToLong(x -> x)
+                                                                .average()
+                                                                .getAsDouble() + "ms");
 
         Assertions.assertEquals(4096, cpu.getAluRegisters()
                                          .read(1));

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class ALUTest {
     @Test
-    void compute_validArguments() throws NoSuchFieldException, IllegalAccessException {
+    void compute_validArguments() {
         ALU alu = new ALU();
         Assertions.assertEquals(new Integer(2), alu.execute(0, new Arguments(1)));
         Assertions.assertEquals(new Integer(-3), alu.execute(3, new Arguments(1, 4)));

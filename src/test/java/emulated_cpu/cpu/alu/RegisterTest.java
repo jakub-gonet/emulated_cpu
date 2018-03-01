@@ -20,13 +20,9 @@ class RegisterTest {
     @Test
     void getValueAt_butAddressOutOfRegisterBounds() {
         Register r = new Register(7);
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-            r.getValueAt(-1);
-        });
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> r.getValueAt(-1));
 
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-            r.getValueAt(32);
-        });
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> r.getValueAt(32));
     }
 
     @Test
