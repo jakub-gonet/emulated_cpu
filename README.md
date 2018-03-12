@@ -6,7 +6,7 @@ Simple CPU emulator in Java.
 
 ## Code examples
 [CPU test file](https://github.com/jakub-gonet/emulated_cpu/blob/master/src/test/java/emulated_cpu/cpu/CPUTest.java) contains some examples of working code, for example Fibbonacci numbers and factorial calculator and bubble sort implementation.
-Most of code examples have provided assembly program.
+Most of code examples are written with assembly program in comment.
 
 ### Currently implemented:
 * [assembler written in Elixir](https://github.com/jakub-gonet/emulated_cpu-assembler)
