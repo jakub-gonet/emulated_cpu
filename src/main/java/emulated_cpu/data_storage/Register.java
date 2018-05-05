@@ -1,4 +1,4 @@
-package emulated_cpu.cpu.data_storage;
+package emulated_cpu.data_storage;
 
 /**
  * This class wraps single register behaviour. Mainly used by Registers class.

@@ -1,4 +1,4 @@
-package emulated_cpu.cpu.data_storage;
+package emulated_cpu.data_storage;
 
 /**
  * Represents status register of a ALU registers. Used to store result of mathematical and logic operations.
