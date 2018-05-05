@@ -1,4 +1,4 @@
-package emulated_cpu.data_storage;
+package emulated_cpu.data_storage.program_storage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Memory is a class containing program memory. This memory is used to store program, variables and stack.
  */
-public class Memory implements Addressable, Executable {
+public class Memory implements ProgramHolder {
     private Logger logger = LogManager.getLogger(Memory.class);
 
     private static Memory instance;
