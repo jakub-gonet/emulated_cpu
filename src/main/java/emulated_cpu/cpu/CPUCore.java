@@ -4,7 +4,9 @@ import emulated_cpu.Command;
 import emulated_cpu.cpu.command.Command2;
 import emulated_cpu.data_storage.AddressableManager;
 import emulated_cpu.data_storage.Registers;
-import emulated_cpu.data_storage.Memory;
+import emulated_cpu.data_storage.program_storage.ProgramHolderManager;
+import emulated_cpu.data_storage.program_storage.Memory;
+import emulated_cpu.data_storage.program_storage.ProgramHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,28 +16,28 @@ import java.util.Optional;
 /**
  * CPU is main class for this project, represents a processor.
  */
-public class CPU {
-    private Logger logger = LogManager.getLogger(CPU.class);
+public class CPUCore {
+    private Logger logger = LogManager.getLogger(CPUCore.class);
     private ALU alu;
     private CU cu;
-    private Memory memory = Memory.getInstance();
+    private ProgramHolder holder = ProgramHolderManager.getCurrentProgramHolder();
 
     /**
-     * Create new CPU object with specified program.
+     * Creates new CPU core with specified program.
      *
      * @param program       program which will be executed
      * @param registerCount specifies how many registers should be available
      * @param stackSize     specifies how big stack should be
      */
-    public CPU(ArrayList<Integer> program, int registerCount, int stackSize) {
-        memory.setMemory(program);
+    public CPUCore(ArrayList<Integer> program, int registerCount, int stackSize) {
+        holder.setProgram(program);
         this.alu = new ALU(registerCount);
         this.cu = new CU(alu.getRegisters()
                             .getStatusRegister(), stackSize);
     }
 
-    public CPU(ArrayList<Integer> program) {
-        memory.setMemory(program);
+    public CPUCore(ArrayList<Integer> program) {
+        holder.setProgram(program);
         this.alu = new ALU();
         this.cu = new CU(alu.getRegisters()
                             .getStatusRegister());
@@ -66,7 +68,7 @@ public class CPU {
     }
 
     /**
-     * Restarts processor, clearing ALU's registers and setting IP to 0.
+     * Restarts processor by clearing ALU's registers and setting IP to 0.
      */
     public void restart() {
         for (int i = 0; i < alu.getRegisters()
@@ -86,7 +88,7 @@ public class CPU {
      * @param program new program to be used
      */
     public void loadNewProgram(ArrayList<Integer> program) {
-        memory.setMemory(program);
+        holder.setProgram(program);
         restart();
         logger.info("Loaded new program into CPU");
     }
