@@ -1,4 +1,4 @@
-package emulated_cpu.cpu.memory;
+package emulated_cpu.data_storage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Memory is a class containing program memory. This memory is used to store program, variables and stack.
  */
-public class Memory implements Addressable {
+public class Memory implements Addressable, Executable {
     private Logger logger = LogManager.getLogger(Memory.class);
 
     private static Memory instance;
@@ -38,7 +38,7 @@ public class Memory implements Addressable {
      * @param memory new memory to be loaded
      * @throws IllegalArgumentException if new memory is null
      */
-    public void setMemory(List<Integer> memory) {
+    public void setProgram(List<Integer> memory) {
         if (memory == null)
             throw new NullPointerException("Memory object can't be null");
 
@@ -50,7 +50,7 @@ public class Memory implements Addressable {
      *
      * @return memory content
      */
-    public List<Integer> getMemory() {
+    public List<Integer> getProgram() {
         return memory;
     }
 
@@ -80,6 +80,11 @@ public class Memory implements Addressable {
     public void write(int address, int data) {
         logger.trace("Writing {} to memory address {}", data, address);
         memory.set(address, data);
+    }
+
+    @Override
+    public int size() {
+        return memory.size();
     }
 
     @Override

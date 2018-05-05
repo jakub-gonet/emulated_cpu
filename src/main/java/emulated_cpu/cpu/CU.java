@@ -1,11 +1,11 @@
 package emulated_cpu.cpu.cu;
 
-import emulated_cpu.Arguments;
-import emulated_cpu.OpCode;
+import emulated_cpu.command.Arguments;
+import emulated_cpu.opcode.OpCode;
 import emulated_cpu.OperatingUnit;
-import emulated_cpu.cpu.alu.StatusRegister;
-import emulated_cpu.cpu.memory.Memory;
-import emulated_cpu.cpu.memory.Stack;
+import emulated_cpu.cpu.data_storage.StatusRegister;
+import emulated_cpu.cpu.data_storage.Memory;
+import emulated_cpu.cpu.data_storage.Stack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

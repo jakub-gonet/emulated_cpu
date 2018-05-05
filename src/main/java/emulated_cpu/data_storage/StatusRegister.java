@@ -1,4 +1,4 @@
-package emulated_cpu.cpu.alu;
+package emulated_cpu.cpu.data_storage;
 
 /**
  * Represents status register of a ALU registers. Used to store result of mathematical and logic operations.
@@ -16,7 +16,7 @@ public class StatusRegister extends Register {
      *
      * @param value value to be stored in register
      */
-    StatusRegister(int value) {
+    public StatusRegister(int value) {
         super(value);
     }
 
@@ -42,7 +42,7 @@ public class StatusRegister extends Register {
      *
      * @param state new state
      */
-    void setZeroFlagState(boolean state) {
+    public void setZeroFlagState(boolean state) {
         this.setValueAt(0, state);
     }
 
@@ -60,7 +60,7 @@ public class StatusRegister extends Register {
      *
      * @param state new state
      */
-    void setCarryFlagState(boolean state) {
+    public void setCarryFlagState(boolean state) {
         this.setValueAt(1, state);
     }
 
@@ -78,7 +78,7 @@ public class StatusRegister extends Register {
      *
      * @param state new state
      */
-    void setNegativeFlagState(boolean state) {
+    public void setNegativeFlagState(boolean state) {
         this.setValueAt(2, state);
     }
 }

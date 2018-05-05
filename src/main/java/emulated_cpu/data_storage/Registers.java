@@ -1,6 +1,5 @@
-package emulated_cpu.cpu.alu;
+package emulated_cpu.cpu.data_storage;
 
-import emulated_cpu.cpu.memory.IOInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
  * Every register has 32 bits (Java int implementation).
  * First register is used as status register and shouldn't be used as general purpose register.
  */
-public class Registers implements IOInterface {
+public class Registers implements Addressable {
     private Logger logger = LogManager.getLogger(Registers.class);
 
     private ArrayList<Register> registers;
