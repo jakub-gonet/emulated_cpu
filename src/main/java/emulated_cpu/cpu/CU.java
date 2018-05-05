@@ -1,14 +1,16 @@
-package emulated_cpu.cpu.cu;
+package emulated_cpu.cpu;
 
-import emulated_cpu.command.Arguments;
-import emulated_cpu.opcode.OpCode;
 import emulated_cpu.OperatingUnit;
-import emulated_cpu.cpu.data_storage.StatusRegister;
-import emulated_cpu.cpu.data_storage.Memory;
-import emulated_cpu.cpu.data_storage.Stack;
+import emulated_cpu.cpu.command.Arguments;
+import emulated_cpu.cpu.opcode.OpCode;
+import emulated_cpu.data_storage.Stack;
+import emulated_cpu.data_storage.StatusRegister;
+import emulated_cpu.data_storage.program_storage.ProgramHolder;
+import emulated_cpu.data_storage.program_storage.ProgramHolderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,94 +23,79 @@ public class CU implements OperatingUnit {
     public int instructionPointer = 0;
     private boolean stopped = false;
     private StatusRegister statusRegister;
-    private Memory memory = Memory.getInstance();
+    private ProgramHolder holder = ProgramHolderManager.getCurrentProgramHolder();
     private Stack stack;
 
     private final ArrayList<OpCode> CU_OP_CODES = new ArrayList<>(Arrays.asList(
-        new OpCode((x, y) -> null, 0),  //NOP
+        //NOP
+        new OpCode((x, y) -> null, 0),
+        //HLT
         new OpCode((x, y) -> {
             logger.info("Stopping the CPU");
             stopped = true;
             return null;
-        }, 0),                          //HLT
-        new OpCode((x, y) -> y, 2),     //MOV
-        new OpCode((x, y) -> {                         //JMP
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JMP opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        }, 0),
+        //MOV
+        new OpCode((x, y) -> y, 2),
+        //JMP
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JMP");
             instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //JE
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JE opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        //JE
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JN");
             if (statusRegister.getZeroFlagState())
                 instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //JNE
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JNE opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        //JNE
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JNE");
             if (!statusRegister.getZeroFlagState())
                 instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //JL
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JL opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        //JL
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JL");
             if (statusRegister.getNegativeFlagState())
                 instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //JLE
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JLE opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        //JLE
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JLE");
             if (statusRegister.getZeroFlagState()
                 || statusRegister.getNegativeFlagState())
                 instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //JG
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JG opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        //JG
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JG");
             if (statusRegister.getCarryFlagState())
                 instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //JGE
-            if (x < 0 || x >= memory.getMemory()
-                                    .size()) {
-                logger.error("Jumping out of memory in JMP opcode");
-                throw new IllegalArgumentException("Jumping out bound of memory");
-            }
+        //JGE
+        new OpCode((x, y) -> {
+            checkIfJumpNotOutOfBounds(x, "JGE");
             if (statusRegister.getZeroFlagState()
                 || statusRegister.getCarryFlagState())
                 instructionPointer = x;
             return null;
         }, 1),
-        new OpCode((x, y) -> {                         //PUSH
+        //PUSH
+        new OpCode((x, y) -> {
             stack.push(x);
             return null;
         }, 1),
-        new OpCode((x, y) -> stack.pop(), 1), //POP
-        new OpCode((x, y) -> {                            //CALL
+        //POP
+        new OpCode((x, y) -> stack.pop(), 1),
+        //CALL
+        new OpCode((x, y) -> {
             stack.push(instructionPointer);
             instructionPointer = x;
             return null;
@@ -165,6 +152,13 @@ public class CU implements OperatingUnit {
         }
     }
 
+    private void checkIfJumpNotOutOfBounds(int address, String opcode) {
+        if (address < 0 || address >= holder.size()) {
+            logger.error(MessageFormat.format("Jumping out of memory in {0} opcode", opcode));
+            throw new IllegalArgumentException("Jumping out bound of memory");
+        }
+    }
+
     /**
      * Gets CU OP codes.
      *
@@ -179,7 +173,7 @@ public class CU implements OperatingUnit {
         return stopped;
     }
 
-    public void setStopped(boolean isStopped){
+    public void setStopped(boolean isStopped) {
         stopped = isStopped;
     }
 }
