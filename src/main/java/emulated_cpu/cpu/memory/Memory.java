@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Memory is a class containing program memory. This memory is used to store program, variables and stack.
  */
-public class Memory implements IOInterface {
+public class Memory implements Addressable {
     private Logger logger = LogManager.getLogger(Memory.class);
 
     private static Memory instance;
