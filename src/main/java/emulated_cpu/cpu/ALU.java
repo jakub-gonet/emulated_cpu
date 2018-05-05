@@ -1,9 +1,9 @@
-package emulated_cpu.cpu.alu;
+package emulated_cpu.cpu;
 
-import emulated_cpu.command.Arguments;
-import emulated_cpu.cpu.data_storage.Registers;
-import emulated_cpu.opcode.OpCode;
 import emulated_cpu.OperatingUnit;
+import emulated_cpu.cpu.command.Arguments;
+import emulated_cpu.cpu.opcode.OpCode;
+import emulated_cpu.data_storage.Registers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
