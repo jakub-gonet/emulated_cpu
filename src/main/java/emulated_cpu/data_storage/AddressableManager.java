@@ -13,7 +13,6 @@ import java.util.Map;
 public final class AddressableManager {
     private static Logger logger = LogManager.getLogger(AddressableManager.class);
 
-    private static Addressable currentAddressable = null;
     private static Map<Integer, Addressable> addressables = new HashMap<>();
     private static int lastId = 0;
 
@@ -53,31 +52,16 @@ public final class AddressableManager {
     }
 
     /**
-     * Sets Addressable with given id as current
+     * Gets Addressable by id
      *
-     * @param id id of a Addressable to set as current
-     * @return true if Addressable exists and set, false otherwise
-     */
-    public static boolean setCurrentAddressable(int id) {
-        if (addressables.containsKey(id)) {
-            Addressable addressable = addressables.get(id);
-            logger.debug(MessageFormat.format("Setting addressable '{0}', with id={1} as current", addressable, lastId + 1));
-            currentAddressable = addressable;
-            return true;
-        }
-        logger.error(MessageFormat.format("Addressable with id={0} doesn't exist", id));
-        return false;
-    }
-
-    /**
-     * Gets current Addressable
-     *
+     * @param id id of a Addressable in Addressales table
      * @return Addressable
      */
-    public static Addressable getCurrentAddressable() {
-        if (currentAddressable == null) {
-            logger.error("Current Addressable is null");
+    public static Addressable getAddressableById(int id) {
+        if (addressables.containsKey(id)) {
+            logger.trace(MessageFormat.format("Taking Addressable with id {0}", id));
+            return addressables.get(id);
         }
-        return currentAddressable;
+        throw new IllegalArgumentException(MessageFormat.format("Addressable with id {0} doesn't exists", id));
     }
 }
