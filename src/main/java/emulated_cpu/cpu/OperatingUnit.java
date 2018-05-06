@@ -1,7 +1,7 @@
-package emulated_cpu;
+package emulated_cpu.cpu;
 
-import emulated_cpu.command.Arguments;
-import emulated_cpu.opcode.OpCode;
+import emulated_cpu.cpu.command.Arguments;
+import emulated_cpu.cpu.opcode.OpCode;
 
 import java.util.ArrayList;
 
