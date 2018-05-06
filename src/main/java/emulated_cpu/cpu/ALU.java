@@ -1,6 +1,5 @@
 package emulated_cpu.cpu;
 
-import emulated_cpu.OperatingUnit;
 import emulated_cpu.cpu.command.Arguments;
 import emulated_cpu.cpu.opcode.OpCode;
 import emulated_cpu.data_storage.Registers;
@@ -85,7 +84,7 @@ public final class ALU implements OperatingUnit {
 
         Integer value = ALU_OP_CODES.get(opCode)
                                     .getOperation()
-                                    .apply(args.arg1, args.arg2);
+                                    .apply(args.getArg1(), args.getArg2());
         logger.debug("Executed 0x{} ALU opcode, got {} in result", Integer.toHexString(opCode), value);
         return value;
     }

@@ -1,6 +1,5 @@
 package emulated_cpu.cpu;
 
-import emulated_cpu.OperatingUnit;
 import emulated_cpu.cpu.command.Arguments;
 import emulated_cpu.cpu.opcode.OpCode;
 import emulated_cpu.data_storage.Stack;
@@ -132,7 +131,7 @@ public class CU implements OperatingUnit {
                    .checkIfArgumentsMatchRequiredCount(args);
         Integer value = CU_OP_CODES.get(opCode)
                                    .getOperation()
-                                   .apply(args.arg1, args.arg2);
+                                   .apply(args.getArg1(), args.getArg2());
 
         logger.debug("Executed 0x{} CU opcode, got {} in result", Integer.toHexString(opCode), value);
 

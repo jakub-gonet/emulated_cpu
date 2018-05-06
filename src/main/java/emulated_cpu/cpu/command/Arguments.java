@@ -5,7 +5,7 @@ package emulated_cpu.cpu.command;
  */
 public class Arguments {
 
-    public Integer arg1, arg2;
+    private Integer arg1, arg2;
 
     /**
      * Creates new Arguments object with two parameters.
@@ -38,5 +38,13 @@ public class Arguments {
         if (arg1 != null) count++;
         if (arg2 != null) count++;
         return count;
+    }
+
+    public Integer getArg1() {
+        return arg1;
+    }
+
+    public Integer getArg2() {
+        return arg2;
     }
 }
