@@ -20,19 +20,19 @@ public final class ALU implements OperatingUnit {
      * ALU_OP_CODES is used as lookup table for getting desired operation.
      */
     private final ArrayList<OpCode> ALU_OP_CODES = new ArrayList<>(Arrays.asList(
-        new OpCode((x, y) -> ++x, 1),   //INC
-        new OpCode((x, y) -> --x, 1),   //DEC
-        new OpCode((x, y) -> x + y, 2), //ADD
-        new OpCode((x, y) -> x - y, 2), //SUB
-        new OpCode((x, y) -> x * y, 2), //MUL
-        new OpCode((x, y) -> x / y, 2), //DIV
-        new OpCode((x, y) -> x & y, 2), //AND
-        new OpCode((x, y) -> x | y, 2), //OR
-        new OpCode((x, y) -> x ^ y, 2), //XOR
-        new OpCode((x, y) -> ~x, 1),    //NOT
-        new OpCode((x, y) -> x >> y, 2),//RSHFT
-        new OpCode((x, y) -> x << y, 2),//LSHFT
-        new OpCode((x, y) -> {                          //CMP
+        new OpCode((x, y) -> ++x, 1, 0),    //INC
+        new OpCode((x, y) -> --x, 1, 1),    //DEC
+        new OpCode((x, y) -> x + y, 2, 2),  //ADD
+        new OpCode((x, y) -> x - y, 2, 3),  //SUB
+        new OpCode((x, y) -> x * y, 2, 4),  //MUL
+        new OpCode((x, y) -> x / y, 2, 5),  //DIV
+        new OpCode((x, y) -> x & y, 2, 6),  //AND
+        new OpCode((x, y) -> x | y, 2, 7),  //OR
+        new OpCode((x, y) -> x ^ y, 2, 8),  //XOR
+        new OpCode((x, y) -> ~x, 1, 9),     //NOT
+        new OpCode((x, y) -> x >> y, 2, 10),//RSHFT
+        new OpCode((x, y) -> x << y, 2, 11),//LSHFT
+        new OpCode((x, y) -> {                                 //CMP
             int diff = x - y;
             registers.getStatusRegister()
                      .setZeroFlagState(false); //reset flags
@@ -50,7 +50,7 @@ public final class ALU implements OperatingUnit {
                 registers.getStatusRegister()
                          .setZeroFlagState(true);
             return null;
-        }, 2)
+        }, 2, 12)
     ));
 
     /**

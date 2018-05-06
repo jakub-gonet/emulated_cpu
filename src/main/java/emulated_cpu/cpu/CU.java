@@ -27,42 +27,42 @@ public class CU implements OperatingUnit {
 
     private final ArrayList<OpCode> CU_OP_CODES = new ArrayList<>(Arrays.asList(
         //NOP
-        new OpCode((x, y) -> null, 0),
+        new OpCode((x, y) -> null, 0, 0),
         //HLT
         new OpCode((x, y) -> {
             logger.info("Stopping the CPU");
             stopped = true;
             return null;
-        }, 0),
+        }, 0, 1),
         //MOV
-        new OpCode((x, y) -> y, 2),
+        new OpCode((x, y) -> y, 2, 2),
         //JMP
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JMP");
             instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 2),
         //JE
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JN");
             if (statusRegister.getZeroFlagState())
                 instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 3),
         //JNE
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JNE");
             if (!statusRegister.getZeroFlagState())
                 instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 4),
         //JL
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JL");
             if (statusRegister.getNegativeFlagState())
                 instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 5),
         //JLE
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JLE");
@@ -70,14 +70,14 @@ public class CU implements OperatingUnit {
                 || statusRegister.getNegativeFlagState())
                 instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 6),
         //JG
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JG");
             if (statusRegister.getCarryFlagState())
                 instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 7),
         //JGE
         new OpCode((x, y) -> {
             checkIfJumpNotOutOfBounds(x, "JGE");
@@ -85,20 +85,20 @@ public class CU implements OperatingUnit {
                 || statusRegister.getCarryFlagState())
                 instructionPointer = x;
             return null;
-        }, 1),
+        }, 1, 8),
         //PUSH
         new OpCode((x, y) -> {
             stack.push(x);
             return null;
-        }, 1),
+        }, 1, 9),
         //POP
-        new OpCode((x, y) -> stack.pop(), 1),
+        new OpCode((x, y) -> stack.pop(), 1, 10),
         //CALL
         new OpCode((x, y) -> {
             stack.push(instructionPointer);
             instructionPointer = x;
             return null;
-        }, 1)
+        }, 1, 11)
     ));
 
     /**
