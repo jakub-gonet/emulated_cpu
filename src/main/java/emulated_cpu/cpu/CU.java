@@ -139,6 +139,15 @@ public class CU implements OperatingUnit {
     }
 
     /**
+     * Reads next data from program holder
+     *
+     * @return data
+     */
+    public int readNextAddress() {
+        return holder.read(instructionPointer++);
+    }
+
+    /**
      * Checks if passed OP code exist in lookup table.
      *
      * @param opCode OP code to be checked
