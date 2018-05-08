@@ -1,30 +1,22 @@
 package emulated_cpu.cpu.command;
 
+import emulated_cpu.data_storage.Addressable;
+
 /**
  * Arguments class is used as OP codes wrapper.
  */
 public class Arguments {
 
-    private Integer arg1, arg2;
+    private Addressable addressable1, addressable2;
+    private Integer addr1;
+    private Integer addr2;
 
-    /**
-     * Creates new Arguments object with two parameters.
-     *
-     * @param arg1 first argument
-     * @param arg2 second argument
-     */
-    public Arguments(Integer arg1, Integer arg2) {
-        this.arg1 = arg1;
-        this.arg2 = arg2;
-    }
 
-    /**
-     * Creates new Arguments object with just one parameter.
-     *
-     * @param arg1 parameter
-     */
-    public Arguments(Integer arg1) {
-        this(arg1, null);
+    public Arguments(Addressable addressable1, Integer addr1, Addressable addressable2, Integer addr2) {
+        this.addressable1 = addressable1;
+        this.addressable2 = addressable2;
+        this.addr1 = addr1;
+        this.addr2 = addr2;
     }
 
 
@@ -35,16 +27,24 @@ public class Arguments {
      */
     public int getArgumentsCount() {
         int count = 0;
-        if (arg1 != null) count++;
-        if (arg2 != null) count++;
+        if (getAddr1() != null) count++;
+        if (getAddr2() != null) count++;
         return count;
     }
 
     public Integer getArg1() {
-        return arg1;
+        return addressable1.read(getAddr1());
     }
 
     public Integer getArg2() {
-        return arg2;
+        return addressable2.read(getAddr2());
+    }
+
+    public Integer getAddr1() {
+        return addr1;
+    }
+
+    public Integer getAddr2() {
+        return addr2;
     }
 }
