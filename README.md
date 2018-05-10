@@ -28,15 +28,3 @@ Most of code examples are written with assembly program in comment.
 * offset addressing for arrays
 * interrupts and interrupt vector table
 * replace some code with Lombok's adnotations
-
-## Contribution
-I'm open to all PRs, project is organizated like so:    
-src/main/java/emulated_cpu/ - main directory    
-Command - manages single command (OP code + args)    
-
-/src/main/java/emulated_cpu/cpu/CPU - entry point    
-
-CPU is divided into three main parts: 
-ALU (arithmetic & logic unit) + registers    
-CU - central processing unit    
-Memory    
