@@ -2,7 +2,8 @@
 [![Build Status](https://travis-ci.org/jakub-gonet/emulated_cpu.svg?branch=master)](https://travis-ci.org/jakub-gonet/emulated_cpu)
 
 ## Description
-Simple CPU emulator in Java.
+Simple CPU emulator in Java.  
+[Quick assembly reference](https://github.com/jakub-gonet/emulated_cpu/blob/master/asm_structure.md)
 
 ## Code examples
 [CPU test file](https://github.com/jakub-gonet/emulated_cpu/blob/master/src/test/java/emulated_cpu/cpu/CPUTest.java) contains some examples of working code, for example Fibbonacci numbers and factorial calculator and bubble sort implementation.
