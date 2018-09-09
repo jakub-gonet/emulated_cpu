@@ -9,7 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class Cu {
     private Logger logger = LogManager.getLogger(Cu.class);
-    private Memory memory = new Memory(100);
+    private Memory memory;
+
+    public Cu(int memorySize) {
+        memory = new Memory(memorySize);
+    }
 
     /**
      * Loads data with given length to main memory, using offsets
@@ -47,7 +51,7 @@ public class Cu {
     /**
      * Checks if read can be performed at given device address
      *
-     * @param device checked device
+     * @param device        checked device
      * @param deviceAddress checked address
      * @return true when read can be done, false otherwise
      */
@@ -60,8 +64,10 @@ public class Cu {
     }
 
 
-    /** Checks if write can be performed at given memory address
-     * @param memory cu memory
+    /**
+     * Checks if write can be performed at given memory address
+     *
+     * @param memory     cu memory
      * @param memAddress checked address
      * @return true when write can be done, false otherwise
      */
