@@ -14,5 +14,18 @@ public class CuTest {
 
         Assertions.assertTrue(cu.loadIntoMemory(programHolder, 0, 5, 0));
     }
+
+    @Test
+    void loadedProgramIsDeviceMemorySublist() {
+        Cu cu = new Cu();
+        SimpleReadableDevice programHolder = new SimpleReadableDevice(5);
+
+        Assertions.assertTrue(cu.loadIntoMemory(programHolder, 0, 5, 0));
+        Assertions.assertTrue(isSublist(programHolder.rawContent(), cu.memory().rawContent()));
+    }
+
+    <E> boolean isSublist(List<E> sublist, List<E> list) {
+        return Collections.indexOfSubList(list, sublist) != -1;
+    }
 }
 
