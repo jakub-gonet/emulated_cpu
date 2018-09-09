@@ -9,9 +9,14 @@ import java.util.List;
 public class SimpleReadableDevice implements Readable {
     private List<Integer> content;
 
-    public SimpleReadableDevice(int programSize) {
-        content = new ArrayList<>(Collections.nCopies(programSize, 0));
+    public SimpleReadableDevice(int programSize, int value) {
+        content = new ArrayList<>(Collections.nCopies(programSize, value));
     }
+
+    public SimpleReadableDevice(int programSize, List<Integer> program) {
+        content = new ArrayList<>(program);
+    }
+
 
     @Override
     public int read(int address) {
