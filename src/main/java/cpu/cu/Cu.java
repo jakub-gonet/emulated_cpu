@@ -24,6 +24,10 @@ public class Cu {
         return true;
     }
 
+    public Memory memory() {
+        return memory;
+    }
+
     private boolean canReadFromDevice(@NotNull Readable device, int deviceAddress) {
         if (!device.canReadAt(deviceAddress)) {
             logger.error("Can't read data from device {} at address {}", device, deviceAddress);
