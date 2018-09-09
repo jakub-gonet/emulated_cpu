@@ -2,11 +2,16 @@ package cpu.cu;
 
 import cpu.memory.Readable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class SimpleReadableDevice implements Readable {
-    private List<Integer> content = Collections.nCopies(5, 0);
+    private List<Integer> content;
+
+    public SimpleReadableDevice(int programSize) {
+        content = new ArrayList<>(Collections.nCopies(programSize, 0));
+    }
 
     @Override
     public int read(int address) {
@@ -15,7 +20,7 @@ public class SimpleReadableDevice implements Readable {
 
     @Override
     public boolean canReadAt(int address) {
-        return 0 < address && address < content.size() - 1;
+        return address >= 0 && address < content.size();
     }
 
     public List<Integer> rawContent() {
