@@ -4,7 +4,6 @@ import cpu.memory.Memory;
 import cpu.memory.Readable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
 
 public class Cu {
@@ -55,7 +54,7 @@ public class Cu {
      * @param deviceAddress checked address
      * @return true when read can be done, false otherwise
      */
-    private boolean canReadFromDevice(@NotNull Readable device, int deviceAddress) {
+    private boolean canReadFromDevice(Readable device, int deviceAddress) {
         if (!device.canReadAt(deviceAddress)) {
             logger.error("Can't read data from device {} at address {}", device, deviceAddress);
             return false;
@@ -71,11 +70,15 @@ public class Cu {
      * @param memAddress checked address
      * @return true when write can be done, false otherwise
      */
-    private boolean canWriteToMemory(@NotNull Memory memory, int memAddress) {
+    private boolean canWriteToMemory(Memory memory, int memAddress) {
         if (!memory.canWriteAt(memAddress)) {
             logger.error("Can't read data from device {} at address {}", memory, memAddress);
             return false;
         }
         return true;
+    }
+
+    public void executeNext() {
+        
     }
 }
