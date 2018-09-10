@@ -7,9 +7,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 class Cpu {
+    private Logger logger = LogManager.getLogger(Cpu.class);
+
     private Memory memory;
     private Cores cores;
-    private Logger logger = LogManager.getLogger(Cpu.class);
 
     Cpu(int memorySize, int coresCount) {
         memory = new Memory(memorySize);
