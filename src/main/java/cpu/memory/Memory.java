@@ -53,14 +53,6 @@ public class Memory implements Readable, Writable {
         return memory.size();
     }
 
-    public boolean expand(int n) {
-        if (n > 0) {
-            memory.addAll(Collections.nCopies(n, 0));
-            return true;
-        }
-        return false;
-    }
-
     private boolean isInMemoryBounds(int address) {
         return address >= 0 && address < memory.size();
     }
