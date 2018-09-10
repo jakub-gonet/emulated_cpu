@@ -12,17 +12,27 @@ public class Cores {
         cores = createCores(count, memory);
     }
 
-    public Cores(List<Core> cores, Memory memory){
+    public Cores(List<Core> cores, Memory memory) {
         this.cores = cores;
     }
 
     /**
      * Gets core by given id
+     *
      * @param id describes core id
      * @return Core object
      */
-    public Core byId(int id) {
+    Core byId(int id) {
         return cores.get(id);
+    }
+
+    /**
+     * Calculates number of cores
+     *
+     * @return core count
+     */
+    int count() {
+        return cores.size();
     }
 
     private List<Core> createCores(int count, Memory memory) {
@@ -32,4 +42,5 @@ public class Cores {
         }
         return cores;
     }
+
 }
