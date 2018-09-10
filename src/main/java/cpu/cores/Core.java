@@ -6,7 +6,7 @@ import cpu.memory.Memory;
 import cpu.memory.Stack;
 import cpu.memory.registers.Registers;
 
-class Core {
+public class Core {
     private int PC;
     private Memory memory;
     private Registers registers;

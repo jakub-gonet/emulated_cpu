@@ -1,5 +1,6 @@
 package cpu;
 
+import cpu.cores.Core;
 import cpu.cores.Cores;
 import cpu.memory.Memory;
 import cpu.memory.Readable;
@@ -46,6 +47,15 @@ class Cpu {
      */
     public Memory memory() {
         return memory;
+    }
+
+    /**
+     * Gets core by given id
+     * @param id describes core id
+     * @return Core object
+     */
+    public Core coreById(int id){
+        return cores.byId(id);
     }
 
     /**
