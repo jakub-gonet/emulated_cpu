@@ -23,6 +23,7 @@ public class CpuTest {
         SimpleReadableDevice programHolder = new SimpleReadableDevice(10, 0);
 
         Assertions.assertFalse(cpu.loadIntoMemory(programHolder, 0, 50, 0));
+        Assertions.assertFalse(cpu.loadIntoMemory(programHolder, 5, 10, 0));
         Assertions.assertFalse(cpu.loadIntoMemory(programHolder, 0, 10, 50));
     }
 
@@ -35,7 +36,7 @@ public class CpuTest {
         Assertions.assertTrue(isSublist(programHolder.rawContent(), cpu.memory().rawContent()));
     }
 
-    <E> boolean isSublist(List<E> sublist, List<E> list) {
+    private <E> boolean isSublist(List<E> sublist, List<E> list) {
         return Collections.indexOfSubList(list, sublist) != -1;
     }
 
