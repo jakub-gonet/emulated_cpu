@@ -37,5 +37,26 @@ public class CuTest {
     <E> boolean isSublist(List<E> sublist, List<E> list) {
         return Collections.indexOfSubList(list, sublist) != -1;
     }
+
+    @Test
+    void canExecuteCuOpcode() {
+        Cu cu = new Cu(20);
+        int stackPushOpCode = 5;
+        int stackPopOpCode = 6;
+        int immediateMode = 0;
+        int memoryMode = 1;
+
+        SimpleReadableDevice programHolder = new SimpleReadableDevice(5, List.of(
+                stackPushOpCode << 6 | immediateMode << 3 | immediateMode,
+                5,
+                stackPopOpCode << 6 | memoryMode << 3,
+                10
+        ));
+
+        cu.executeNext();
+        cu.executeNext();
+
+        Assertions.assertEquals(5, cu.memory().read(10));
+    }
 }
 
