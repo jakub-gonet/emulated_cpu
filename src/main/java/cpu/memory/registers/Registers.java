@@ -47,6 +47,19 @@ public class Registers {
         return generalPurpose.size();
     }
 
+
+    /**
+     * Resets general purpose register as well as status register.
+     */
+    public void resetRegisters() {
+        for (Register r :
+                generalPurpose) {
+            r.set(0);
+        }
+
+        statusRegister.set(0);
+    }
+
     private List<Register> createRegisters(int count) {
         List<Register> registers = new ArrayList<>();
 
