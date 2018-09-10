@@ -1,7 +1,7 @@
 package cpu.cores;
 
-import cpu.alu.Alu;
-import cpu.cu.Cu;
+import cpu.processing.Alu;
+import cpu.processing.Cu;
 import cpu.memory.Memory;
 import cpu.memory.Stack;
 import cpu.memory.registers.Registers;

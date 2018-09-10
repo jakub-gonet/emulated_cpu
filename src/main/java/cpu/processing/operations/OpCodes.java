@@ -1,6 +1,4 @@
-package cpu;
-
-import cpu.operations.OpCode;
+package cpu.processing.operations;
 
 import java.util.List;
 

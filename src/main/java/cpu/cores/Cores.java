@@ -12,6 +12,10 @@ public class Cores {
         cores = createCores(count, memory);
     }
 
+    public Cores(List<Core> cores, Memory memory){
+        this.cores = cores;
+    }
+
     /**
      * Gets core by given id
      * @param id describes core id
