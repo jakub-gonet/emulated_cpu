@@ -60,19 +60,19 @@ public class StatusRegister extends Register {
         boolean state = false;
         switch (flag) {
             case ZERO:
-                state = valueAt(0) == 1;
+                state = valueAt(0);
                 break;
 
             case POSITIVE:
-                state = valueAt(1) == 1;
+                state = valueAt(1);
                 break;
 
             case NEGATIVE:
-                state = valueAt(2) == 1;
+                state = valueAt(2);
                 break;
 
             case STOPPED:
-                state = valueAt(3) == 1;
+                state = valueAt(3);
                 break;
         }
         return state;

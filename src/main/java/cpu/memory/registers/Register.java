@@ -34,8 +34,8 @@ public class Register {
      * @param bitIndex index of read bit
      * @return bit value at index
      */
-    int valueAt(int bitIndex) {
-        return (value >> bitIndex) & 1;
+    boolean valueAt(int bitIndex) {
+        return ((value >> bitIndex) & 1) == 1;
     }
 
     /**
