@@ -10,8 +10,8 @@ public class Cu {
     private Logger logger = LogManager.getLogger(Cu.class);
     private Memory memory;
 
-    public Cu(int memorySize) {
-        memory = new Memory(memorySize);
+    public Cu(Memory memory) {
+        this.memory = memory;
     }
 
     /**
@@ -79,6 +79,6 @@ public class Cu {
     }
 
     public void executeNext() {
-        
+
     }
 }
