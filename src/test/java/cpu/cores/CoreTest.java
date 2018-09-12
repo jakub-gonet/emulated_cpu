@@ -10,9 +10,10 @@ class CoreTest {
     @Test
     void canExecuteNextOperation() {
         int hltOpCode = 5;
-        Core core = new Core(new Memory(List.of()));
+        Core core = new Core(new Memory(List.of(hltOpCode)));
 
         core.executeNext();
+        Assertions.assertTrue(core.isStopped());
     }
 
     @Test
