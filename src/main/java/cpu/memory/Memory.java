@@ -16,6 +16,11 @@ public class Memory implements Readable, Writable {
         memory = new ArrayList<>(Collections.nCopies(size, 0));
     }
 
+    public Memory(List<Integer> initial){
+        logger.info("Creating Memory object with initial value from {}", initial);
+        memory = new ArrayList<>(initial);
+    }
+
     @Override
     public int read(int address) {
         if (canReadAt(address)) {
