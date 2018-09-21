@@ -15,11 +15,18 @@ public class MemoryManager {
         return true;
     }
 
-    public Readable ReadableDevice(int id) throws InvalidKeyException, IllegalAccessException {
+    public Readable readableDevice(int id) throws InvalidKeyException, IllegalAccessException {
         Device device = deviceOrThrow(id);
 
         if (!device.isReadable()) throw new IllegalAccessException("Device with id " + id + " is not Readable");
         return (Readable) device.self();
+    }
+
+    public Writable writableDevice(int id) throws InvalidKeyException, IllegalAccessException {
+        Device device = deviceOrThrow(id);
+
+        if (!device.isWritable()) throw new IllegalAccessException("Device with id " + id + " is not Writable");
+        return (Writable) device.self();
     }
 
     private Device deviceOrThrow(int id) throws InvalidKeyException {
