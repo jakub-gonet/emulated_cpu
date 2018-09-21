@@ -15,8 +15,13 @@ public class Operation {
     private final int addrModeBitFieldLength = (int) Math.pow(2, addrModeLength) - 1;
     private final int argNumLength = 2;
     private final int argNumBitFieldLength = (int) Math.pow(2, argNumLength) - 1;
+    private final int maxArgNum = 2;
+
     private Readable memory;
     private MemoryManager manager;
+
+    private int opCodeNum;
+    private List<Integer> args;
 
     public Operation(Readable memory, MemoryManager manager) {
         this.manager = manager;
@@ -27,7 +32,8 @@ public class Operation {
         List<Integer> args = new ArrayList<>();
 
         int opCodeAndAddresses = memory.read(currentAddress++);
-        int argNum = (opCodeAndAddresses >> 2 * addrModeLength) & argNumBitFieldLength;
+        int argNum = (opCodeAndAddresses >> maxArgNum * addrModeLength) & argNumBitFieldLength;
+        if (argNum > maxArgNum) throw new IllegalStateException("Exceeded max arg number: " + argNum);
 
         for (int i = argNum - 1; i >= 0; i--) {
             int nextValue = memory.read(currentAddress++);
@@ -44,6 +50,9 @@ public class Operation {
             }
         }
 
+
+        this.opCodeNum = opCodeAndAddresses >> (maxArgNum * addrModeLength + argNumLength);
+        this.args = args;
         return currentAddress;
     }
 
