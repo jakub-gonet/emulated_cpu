@@ -9,14 +9,14 @@ public class MemoryManager {
     private Map<Integer, Readable> readableDeviceMapping = new HashMap<>();
     private Map<Integer, Writable> writableDeviceMapping = new HashMap<>();
 
-    public boolean addDevice(int id, Readable device) {
+    public boolean addReadableDevice(int id, Readable device) {
         if (readableDeviceMapping.get(id) != null) return false;
 
         readableDeviceMapping.put(id, device);
         return true;
     }
 
-    public boolean addDevice(int id, Writable device) {
+    public boolean addWritableDevice(int id, Writable device) {
         if (writableDeviceMapping.get(id) != null) return false;
 
         writableDeviceMapping.put(id, device);
