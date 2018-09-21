@@ -44,9 +44,6 @@ public class Operation {
             } catch (InvalidKeyException e) {
                 logger.error("Invalid device id: " + deviceIdContainingValue);
                 throw new IllegalStateException("Invalid device id in argument");
-            } catch (IllegalAccessException e) {
-                logger.error("Device with " + deviceIdContainingValue + " id is not Readable");
-                throw new IllegalStateException("Device not Readable");
             }
         }
 
@@ -56,8 +53,16 @@ public class Operation {
         return currentAddress;
     }
 
-    private int valueFromDevice(int deviceId, int address) throws InvalidKeyException, IllegalAccessException {
-        Readable device = manager.ReadableDevice(deviceId);
+    private int valueFromDevice(int deviceId, int address) throws InvalidKeyException {
+        Readable device = manager.readableDevice(deviceId);
         return device.read(address);
+    }
+
+    public int opCodeNum() {
+        return opCodeNum;
+    }
+
+    public List<Integer> args() {
+        return new ArrayList<>(args);
     }
 }

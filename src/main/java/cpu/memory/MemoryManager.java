@@ -6,30 +6,32 @@ import java.util.Map;
 import java.util.Optional;
 
 public class MemoryManager {
-    private Map<Integer, Device> deviceMapping = new HashMap<>();
+    private Map<Integer, Readable> readableDeviceMapping = new HashMap<>();
+    private Map<Integer, Writable> writableDeviceMapping = new HashMap<>();
 
-    public boolean addDevice(int id, Device device) {
-        if (deviceMapping.get(id) != null) return false;
+    public boolean addDevice(int id, Readable device) {
+        if (readableDeviceMapping.get(id) != null) return false;
 
-        deviceMapping.put(id, device);
+        readableDeviceMapping.put(id, device);
         return true;
     }
 
-    public Readable readableDevice(int id) throws InvalidKeyException, IllegalAccessException {
-        Device device = deviceOrThrow(id);
+    public boolean addDevice(int id, Writable device) {
+        if (writableDeviceMapping.get(id) != null) return false;
 
-        if (!device.isReadable()) throw new IllegalAccessException("Device with id " + id + " is not Readable");
-        return (Readable) device.self();
+        writableDeviceMapping.put(id, device);
+        return true;
     }
 
-    public Writable writableDevice(int id) throws InvalidKeyException, IllegalAccessException {
-        Device device = deviceOrThrow(id);
-
-        if (!device.isWritable()) throw new IllegalAccessException("Device with id " + id + " is not Writable");
-        return (Writable) device.self();
+    public Readable readableDevice(int id) throws InvalidKeyException {
+        return (Readable) mappingOrThrow(readableDeviceMapping, id);
     }
 
-    private Device deviceOrThrow(int id) throws InvalidKeyException {
-        return Optional.ofNullable(deviceMapping.get(id)).orElseThrow(() -> new InvalidKeyException("Device with id " + id + " not found"));
+    public Writable writableDevice(int id) throws InvalidKeyException {
+        return (Writable) mappingOrThrow(writableDeviceMapping, id);
+    }
+
+    private Object mappingOrThrow(Map mapping, int id) throws InvalidKeyException {
+        return Optional.ofNullable(mapping.get(id)).orElseThrow(() -> new InvalidKeyException("Object with id " + id + " not found in mapping: " + mapping.toString()));
     }
 }
