@@ -29,7 +29,7 @@ public class Operation {
         final int argNumLength = 2;
         final int argNumBitFieldLength = (int) Math.pow(2, argNumLength) - 1;
         final int maxArgNum = 2;
-        
+
         List<Integer> args = new ArrayList<>();
 
         int opCodeAndAddresses = memory.read(currentAddress++);
