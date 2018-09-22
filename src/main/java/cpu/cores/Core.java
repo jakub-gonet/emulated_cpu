@@ -37,8 +37,11 @@ public class Core {
         alu = new Alu();
     }
 
-    void executeNext() {
+    void executeNext() throws InvalidKeyException {
+        Operation operation = new Operation(memManager);
+        PC = operation.fetch(PC);
 
+        cu.execute(operation);
     }
 
     /**
