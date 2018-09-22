@@ -1,11 +1,13 @@
 package cpu.memory.registers;
 
+import cpu.memory.Readable;
+import cpu.memory.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Registers {
-    private List<Register> generalPurpose;
-    private StatusRegister statusRegister;
+public class Registers implements Readable, Writable {
+    private List<Register> registers = new ArrayList<>();
 
     /**
      * Creates new Register object with `count` number of general purpose `Register`s.
@@ -13,8 +15,8 @@ public class Registers {
      * @param count how many registers should be created
      */
     public Registers(int count) {
-        generalPurpose = createRegisters(count);
-        statusRegister = new StatusRegister();
+        registers.add(new StatusRegister());
+        registers.addAll(createRegisters(count));
     }
 
 
@@ -24,7 +26,7 @@ public class Registers {
      * @return StatusRegister object
      */
     public StatusRegister statusRegister() {
-        return statusRegister;
+        return (StatusRegister) byId(0);
     }
 
 
@@ -35,7 +37,7 @@ public class Registers {
      * @return Register object
      */
     public Register byId(int id) {
-        return generalPurpose.get(id);
+        return registers.get(id);
     }
 
     /**
@@ -44,7 +46,7 @@ public class Registers {
      * @return count of general purpose registers
      */
     public int size() {
-        return generalPurpose.size();
+        return registers.size();
     }
 
 
@@ -53,11 +55,29 @@ public class Registers {
      */
     public void resetRegisters() {
         for (Register r :
-                generalPurpose) {
+                registers) {
             r.set(0);
         }
+    }
 
-        statusRegister.set(0);
+    @Override
+    public int read(int address) {
+        return byId(address).value();
+    }
+
+    @Override
+    public boolean canReadAt(int address) {
+        return isInRegistersBounds(address);
+    }
+
+    @Override
+    public void write(int address, int data) {
+        byId(address).set(data);
+    }
+
+    @Override
+    public boolean canWriteAt(int address) {
+        return isInRegistersBounds(address);
     }
 
     private List<Register> createRegisters(int count) {
@@ -67,5 +87,9 @@ public class Registers {
             registers.add(new Register());
         }
         return registers;
+    }
+
+    private boolean isInRegistersBounds(int address) {
+        return address >= 0 && address < registers.size();
     }
 }
