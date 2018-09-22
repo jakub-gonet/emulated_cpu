@@ -50,7 +50,9 @@ public class Core {
      * @return true if stopped, false otherwise
      */
     public boolean isStopped() {
-        return registers.statusRegister().state(StatusRegister.StatusFlags.STOPPED);
+        return registers
+                .statusRegister()
+                .state(StatusRegister.StatusFlags.STOPPED);
     }
 
     /**
