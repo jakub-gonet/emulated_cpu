@@ -1,6 +1,6 @@
 package cpu.cores;
 
-import cpu.memory.Memory;
+import cpu.memory.MemoryManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public class Cores {
     private List<Core> cores;
 
-    public Cores(int count, Memory memory) {
-        cores = createCores(count, memory);
+    public Cores(int count, MemoryManager manager) {
+        cores = createCores(count, manager);
     }
 
-    public Cores(List<Core> cores, Memory memory) {
+    public Cores(List<Core> cores) {
         this.cores = cores;
     }
 
@@ -35,10 +35,10 @@ public class Cores {
         return cores.size();
     }
 
-    private List<Core> createCores(int count, Memory memory) {
+    private List<Core> createCores(int count, MemoryManager manager) {
         List<Core> cores = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            cores.add(new Core(memory));
+            cores.add(new Core(manager));
         }
         return cores;
     }
