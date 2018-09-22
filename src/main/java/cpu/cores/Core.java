@@ -1,6 +1,5 @@
 package cpu.cores;
 
-import cpu.memory.Memory;
 import cpu.memory.MemoryManager;
 import cpu.memory.Stack;
 import cpu.memory.registers.Registers;
@@ -20,7 +19,6 @@ public class Core {
     private Logger logger = LogManager.getLogger(Core.class);
 
     private int PC;
-    private Memory memory;
     private MemoryManager memManager;
     private Registers registers;
     private Stack stack;
@@ -28,14 +26,13 @@ public class Core {
     private Alu alu;
 
     Core(MemoryManager memManager) throws IllegalStateException {
+        this.registers = new Registers(10);
+        this.stack = new Stack();
+
+        memManager.addReadableWritableDevice(1, registers);
+        memManager.addReadableWritableDevice(2, stack);
         this.memManager = memManager;
-        try {
-            this.memory = memManager.readableWritableDevice(0);
-        } catch (InvalidKeyException e) {
-            logger.error("Could not obtain Memory from MemoryManager");
-            throw new IllegalStateException();
-        }
-        registers = new Registers(10);
+
         cu = new Cu();
         alu = new Alu();
     }
