@@ -2,6 +2,7 @@ package cpu.memory;
 
 import java.security.InvalidKeyException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,20 +34,24 @@ public class MemoryManager {
     }
 
     public Readable readableDevice(int id) throws InvalidKeyException {
-        return (Readable) deviceByType(deviceWithTypeById(id), Type.READABLE);
+        return (Readable) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE, Type.READABLE_WRITABLE));
     }
 
     public Writable writableDevice(int id) throws InvalidKeyException {
-        return (Writable) deviceByType(deviceWithTypeById(id), Type.WRITABLE);
+        return (Writable) deviceByTypes(deviceWithTypeById(id), List.of(Type.WRITABLE, Type.READABLE_WRITABLE));
     }
 
     public <T extends Writable & Readable> T readableWritableDevice(int id) throws InvalidKeyException {
-        return (T) deviceByType(deviceWithTypeById(id), Type.READABLE_WRITABLE);
+        return (T) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE_WRITABLE));
     }
 
-    private Object deviceByType(Map<Type, Object> deviceWithType, Type type) throws InvalidKeyException {
-        return Optional.ofNullable(deviceWithType.get(type))
-                       .orElseThrow(() -> new InvalidKeyException("Device with type" + deviceWithType + " is not " + type));
+    private Object deviceByTypes(Map<Type, Object> deviceWithType, List<Type> types) throws InvalidKeyException {
+        for (Type type : types) {
+            if (deviceWithType.containsKey(type)) {
+                return deviceWithType.get(type);
+            }
+        }
+        throw new InvalidKeyException("Device " + deviceWithType + " is not of " + types);
     }
 
     private Map<Type, Object> deviceWithTypeById(int id) throws InvalidKeyException {
