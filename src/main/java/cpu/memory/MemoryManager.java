@@ -41,6 +41,7 @@ public class MemoryManager {
         return (Writable) deviceByTypes(deviceWithTypeById(id), List.of(Type.WRITABLE, Type.READABLE_WRITABLE));
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Writable & Readable> T readableWritableDevice(int id) throws InvalidKeyException {
         return (T) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE_WRITABLE));
     }
