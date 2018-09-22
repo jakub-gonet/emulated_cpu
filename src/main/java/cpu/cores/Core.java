@@ -61,7 +61,7 @@ public class Core {
     public void restart() {
         registers.resetRegisters();
         PC = 0;
-        //        stack.reset();
+        stack.reset();
         logger.info("Restarted the CPU");
     }
 }

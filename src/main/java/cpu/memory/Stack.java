@@ -20,4 +20,7 @@ public class Stack implements Readable, Writable {
     public boolean canWriteAt(int address) {
         return false;
     }
+
+    public void reset() {
+    }
 }
