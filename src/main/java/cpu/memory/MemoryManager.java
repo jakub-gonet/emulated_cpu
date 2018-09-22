@@ -12,15 +12,20 @@ public class MemoryManager {
     public boolean addReadableDevice(int id, Readable device) {
         if (readableDeviceMapping.get(id) != null) return false;
 
-        readableDeviceMapping.put(id, device);
-        return true;
+    public boolean addReadableDevice(int id, Readable device) {
+        if (isIdNotUsed(readableDeviceMapping, id)) {
+            readableDeviceMapping.put(id, device);
+            return true;
+        }
+        return false;
     }
 
     public boolean addWritableDevice(int id, Writable device) {
-        if (writableDeviceMapping.get(id) != null) return false;
-
-        writableDeviceMapping.put(id, device);
-        return true;
+        if (isIdNotUsed(writableDeviceMapping, id)) {
+            writableDeviceMapping.put(id, device);
+            return true;
+        }
+        return false;
     }
 
     public Readable readableDevice(int id) throws InvalidKeyException {
@@ -33,5 +38,9 @@ public class MemoryManager {
 
     private Object mappingOrThrow(Map mapping, int id) throws InvalidKeyException {
         return Optional.ofNullable(mapping.get(id)).orElseThrow(() -> new InvalidKeyException("Object with id " + id + " not found in mapping: " + mapping.toString()));
+    }
+
+    private boolean isIdNotUsed(Map mapping, int id) {
+        return !mapping.containsKey(id);
     }
 }
