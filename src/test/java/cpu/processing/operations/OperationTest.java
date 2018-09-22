@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.security.InvalidKeyException;
 import java.util.List;
 
 class OperationTest {
     private Operation op;
 
     @BeforeEach
-    void setup() {
+    void setup() throws InvalidKeyException {
         Memory mem = new Memory(List.of(
                 0xcafe,
                 0xbabe,
@@ -24,7 +25,7 @@ class OperationTest {
         MemoryManager manager = new MemoryManager();
         manager.addReadableDevice(0, mem);
 
-        this.op = new Operation(mem, manager);
+        this.op = new Operation(manager);
     }
 
     @Test

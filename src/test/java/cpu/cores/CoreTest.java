@@ -5,12 +5,13 @@ import cpu.memory.MemoryManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.security.InvalidKeyException;
 import java.util.List;
 
 class CoreTest {
     @Test
-    void canExecuteNextOperation() {
-        int hltOpCode = 5;
+    void canExecuteNextOperation() throws InvalidKeyException {
+        int hltOpCode = 5 << 8 | 0 << 6;
         Core core = new Core(createMemManagerWithMemory(new Memory(List.of(hltOpCode))));
 
         core.executeNext();
