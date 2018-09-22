@@ -2,6 +2,7 @@ package cpu;
 
 import cpu.cores.Cores;
 import cpu.memory.Memory;
+import cpu.memory.MemoryManager;
 import cpu.memory.Readable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +15,7 @@ class Cpu {
 
     Cpu(int memorySize, int coresCount) {
         memory = new Memory(memorySize);
-        cores = new Cores(coresCount, memory);
+        cores = new Cores(coresCount, new MemoryManager(memory));
     }
 
     /**
