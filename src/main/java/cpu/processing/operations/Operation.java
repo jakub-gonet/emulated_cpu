@@ -18,9 +18,9 @@ public class Operation {
     private int opCodeNum;
     private List<Integer> args;
 
-    public Operation(Readable memory, MemoryManager manager) {
+    public Operation(MemoryManager manager) throws InvalidKeyException {
         this.manager = manager;
-        this.memory = memory;
+        this.memory = manager.readableDevice(0);
     }
 
     public int fetch(int currentAddress) throws IllegalStateException {
