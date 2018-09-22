@@ -33,11 +33,12 @@ public class Operation {
 
         int opCodeAndAddresses = memory.read(currentAddress++);
         int argNum = (opCodeAndAddresses >> maxArgNum * addrModeLength) & argNumBitFieldLength;
-        if (argNum > maxArgNum) throw new IllegalStateException("Exceeded max arg number: " + argNum);
+        if (argNum > maxArgNum)
+            throw new IllegalStateException("Exceeded max arg number: " + argNum);
 
-        for (int i = argNum - 1; i >= 0; i--) {
+        for (int i = 0; i < argNum; i++) {
             int nextValue = memory.read(currentAddress++);
-            int deviceIdContainingValue = (opCodeAndAddresses >> i * addrModeLength) & addrModeBitFieldLength;
+            int deviceIdContainingValue = (opCodeAndAddresses >> (maxArgNum - i - 1) * addrModeLength) & addrModeBitFieldLength;
 
             try {
                 args.add(valueFromDevice(deviceIdContainingValue, nextValue));
