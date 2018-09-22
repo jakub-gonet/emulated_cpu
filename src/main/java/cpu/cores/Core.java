@@ -38,8 +38,6 @@ public class Core {
         registers = new Registers(10);
         cu = new Cu();
         alu = new Alu();
-
-        logger.info(memory.rawContent());
     }
 
     void executeNext() {
