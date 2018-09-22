@@ -14,6 +14,10 @@ public class MemoryManager {
 
     private Map<Integer, Map<Type, Object>> deviceMapping = new HashMap<>();
 
+    public MemoryManager(Memory mem) {
+        addReadableWritableDevice(0, mem);
+    }
+
     public <T extends Readable & Writable> boolean addReadableWritableDevice(int id, T device) {
         return addDevice(id, Type.READABLE_WRITABLE, device);
     }
