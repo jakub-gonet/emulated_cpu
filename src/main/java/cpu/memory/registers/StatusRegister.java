@@ -5,10 +5,11 @@ package cpu.memory.registers;
  * <p>
  * Structure of a Status register:
  * <p>
- * bit 0 - zero flag (indicates zero value of last operation) - Z <p>
- * bit 1 - positive flag (indicates more than zero value of last operation) - C <p>
- * bit 2 - negative flag (indicates less than zero value of last operation) - N <p>
- * bit 3-31 - not used <p>
+ * bit 0 - zero flag (indicates zero value of last operation)<p>
+ * bit 1 - positive flag (indicates more than zero value of last operation)<p>
+ * bit 2 - negative flag (indicates less than zero value of last operation)<p>
+ * bit 3 - stopped flag (indicates that Core is stopped)<p>
+ * bit 4-31 - not used <p>
  */
 public class StatusRegister extends Register {
     /**
