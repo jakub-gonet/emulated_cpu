@@ -14,6 +14,8 @@ public class MemoryManager {
 
     private Map<Integer, Map<Type, Object>> deviceMapping = new HashMap<>();
 
+    public MemoryManager() {}
+
     public MemoryManager(Memory mem) {
         addReadableWritableDevice(0, mem);
     }
