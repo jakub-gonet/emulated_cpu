@@ -11,11 +11,6 @@ import java.util.List;
 
 public class Operation {
     private Logger logger = LogManager.getLogger(Operation.class);
-    private final int addrModeLength = 3;
-    private final int addrModeBitFieldLength = (int) Math.pow(2, addrModeLength) - 1;
-    private final int argNumLength = 2;
-    private final int argNumBitFieldLength = (int) Math.pow(2, argNumLength) - 1;
-    private final int maxArgNum = 2;
 
     private Readable memory;
     private MemoryManager manager;
@@ -29,6 +24,12 @@ public class Operation {
     }
 
     public int fetch(int currentAddress) throws IllegalStateException {
+        final int addrModeLength = 3;
+        final int addrModeBitFieldLength = (int) Math.pow(2, addrModeLength) - 1;
+        final int argNumLength = 2;
+        final int argNumBitFieldLength = (int) Math.pow(2, argNumLength) - 1;
+        final int maxArgNum = 2;
+        
         List<Integer> args = new ArrayList<>();
 
         int opCodeAndAddresses = memory.read(currentAddress++);
