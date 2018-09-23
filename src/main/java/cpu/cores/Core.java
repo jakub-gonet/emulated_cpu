@@ -4,7 +4,6 @@ import cpu.memory.MemoryManager;
 import cpu.memory.Stack;
 import cpu.memory.registers.Registers;
 import cpu.memory.registers.StatusRegister;
-import cpu.processing.Alu;
 import cpu.processing.Cu;
 import cpu.processing.operations.Operation;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +14,7 @@ import java.security.InvalidKeyException;
 /**
  * This class resembles a single CPU core.
  */
-public class Core {
+class Core {
     private Logger logger = LogManager.getLogger(Core.class);
 
     private int PC;
@@ -23,7 +22,6 @@ public class Core {
     private Registers registers;
     private Stack stack;
     private Cu cu;
-    private Alu alu;
 
     Core(MemoryManager memManager) throws IllegalStateException {
         this.registers = new Registers(10);
@@ -34,7 +32,6 @@ public class Core {
         this.memManager = memManager;
 
         cu = new Cu();
-        alu = new Alu();
     }
 
     void executeNext() throws InvalidKeyException {
