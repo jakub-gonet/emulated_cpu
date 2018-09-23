@@ -1,7 +1,7 @@
 package cpu.memory;
 
 /**
- * Interface used to mark devices as read only.
+ * Provides interface used to mark devices as read only.
  *
  * @see Writable
  */
