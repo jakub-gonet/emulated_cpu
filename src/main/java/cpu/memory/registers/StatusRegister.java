@@ -79,6 +79,9 @@ public class StatusRegister extends Register {
         return state;
     }
 
+    /**
+     * Flags used to mark bits.
+     */
     public enum StatusFlags {
         ZERO,
         POSITIVE,
