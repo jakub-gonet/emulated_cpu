@@ -1,6 +1,9 @@
 package cpu.memory.registers;
 
-public class Register {
+/**
+ * Represents a single Register which can be read from and written to.
+ */
+class Register {
     private int value;
 
     /**
@@ -8,14 +11,14 @@ public class Register {
      *
      * @param value value to be stored in register
      */
-    public Register(int value) {
+    Register(int value) {
         this.value = value;
     }
 
     /**
      * Creates new Register with initial 0 value.
      */
-    public Register() {
+    Register() {
         value = 0;
     }
 
@@ -55,7 +58,7 @@ public class Register {
      */
     void setValueAt(int bitIndex, boolean value) {
         this.value = value ?
-                this.value | (1 << bitIndex) :
-                this.value & ~(1 << bitIndex);
+                     this.value | (1 << bitIndex) :
+                     this.value & ~(1 << bitIndex);
     }
 }
