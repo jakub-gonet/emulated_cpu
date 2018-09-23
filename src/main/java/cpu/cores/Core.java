@@ -23,18 +23,36 @@ class Core {
     private Stack stack;
     private Cu cu;
 
-    Core(MemoryManager memManager) throws IllegalStateException {
+    /**
+     * Creates a new Core with memory mapping from MemoryManager
+     *
+     * @param memManager a MemoryManager
+     * @throws IllegalStateException if mapping for id 1 or 2 already exists in provided MemoryManager
+     */
+    Core(MemoryManager memManager) {
         this.registers = new Registers(10);
         this.stack = new Stack();
 
-        memManager.addReadableWritableDevice(1, registers);
-        memManager.addReadableWritableDevice(2, stack);
+        boolean success = memManager.addReadableWritableDevice(1, registers) &&
+                memManager.addReadableWritableDevice(2, stack);
+        if (!success)
+            throw new IllegalStateException("Could not create mapping for registers or stack");
         this.memManager = memManager;
 
         cu = new Cu();
     }
 
-    void executeNext() throws InvalidKeyException {
+    /**
+     * Executes next OpCode loaded from Memory on address pointed by ProgramCounter.
+     *
+     * @throws InvalidKeyException   if Memory wasn't mapped to id 0
+     * @throws IllegalStateException if OpCode contained device id not mapped in MemoryManager
+     *                               or if OpCode argument count exceeded max argument count
+     * @see MemoryManager
+     * @see Operation
+     * @see Operation#fetch(int)
+     */
+    void executeNext() throws InvalidKeyException, IllegalStateException {
         Operation operation = new Operation(memManager);
         PC = operation.fetch(PC);
 
@@ -46,7 +64,7 @@ class Core {
      *
      * @return true if stopped, false otherwise
      */
-    public boolean isStopped() {
+    boolean isStopped() {
         return registers
                 .statusRegister()
                 .state(StatusRegister.StatusFlags.STOPPED);
@@ -55,7 +73,7 @@ class Core {
     /**
      * Restarts core by resetting registers, PC and stack.
      */
-    public void restart() {
+    void restart() {
         registers.resetRegisters();
         PC = 0;
         stack.reset();
