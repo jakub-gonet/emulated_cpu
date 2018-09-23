@@ -75,6 +75,15 @@ public class MemoryManager {
     public MemoryManager() {}
 
     /**
+     * Creates a MemoryManager based on other MemoryManager, creating shallow copy of it.
+     *
+     * @param manager manager used as template
+     */
+    public MemoryManager(MemoryManager manager) {
+        this.deviceMapping = new HashMap<>(manager.deviceMapping);
+    }
+
+    /**
      * Constructs a new MemoryManager with provided Memory mapped with <code>id = 0</code>
      *
      * @param mem a Memory object
@@ -206,5 +215,10 @@ public class MemoryManager {
      */
     private Map<Type, Object> createDeviceMapping(Type type, Object device) {
         return new HashMap<>(Map.of(type, device));
+    }
+
+    @Override
+    public String toString() {
+        return deviceMapping.toString();
     }
 }
