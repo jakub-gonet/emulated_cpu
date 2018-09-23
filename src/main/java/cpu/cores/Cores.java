@@ -38,7 +38,7 @@ public class Cores {
     private List<Core> createCores(int count, MemoryManager manager) {
         List<Core> cores = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            cores.add(new Core(manager));
+            cores.add(new Core(new MemoryManager(manager)));
         }
         return cores;
     }
