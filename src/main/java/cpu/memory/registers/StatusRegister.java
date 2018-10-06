@@ -80,6 +80,13 @@ public class StatusRegister extends Register {
     }
 
     /**
+     * Resets POSITIVE, NEGATIVE AND ZERO flags
+     */
+    void resetArithmeticFlags() {
+        this.set(this.value() & ~(0x7));
+    }
+
+    /**
      * Flags used to mark bits.
      */
     public enum StatusFlags {

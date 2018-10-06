@@ -9,7 +9,7 @@ import static cpu.memory.registers.StatusRegister.StatusFlags;
 
 class StatusRegisterTest {
     @Test
-    void canCreateStatusRegisterWithInitialValue(){
+    void canCreateStatusRegisterWithInitialValue() {
         StatusRegister status = new StatusRegister(3);
 
         Assertions.assertTrue(status.state(StatusFlags.ZERO));
@@ -30,4 +30,19 @@ class StatusRegisterTest {
         Assertions.assertFalse(status.state(flag));
     }
 
+    @Test
+    void canResetArithmeticFlags(){
+        StatusRegister status = new StatusRegister();
+
+        status.set(StatusFlags.STOPPED, true);
+        status.set(StatusFlags.POSITIVE, true);
+        status.set(StatusFlags.ZERO, true);
+
+        status.resetArithmeticFlags();
+
+        Assertions.assertFalse(status.state(StatusFlags.POSITIVE));
+        Assertions.assertFalse(status.state(StatusFlags.NEGATIVE));
+        Assertions.assertFalse(status.state(StatusFlags.ZERO));
+        Assertions.assertTrue(status.state(StatusFlags.STOPPED)); 
+    }
 }
