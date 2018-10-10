@@ -12,7 +12,7 @@ class CoreTest {
     @Test
     void canExecuteNextOperation() throws InvalidKeyException {
         int hltOpCode = 5 << 8 | 0 << 6;
-        Core core = new Core(createMemManagerWithMemory(new Memory(List.of(hltOpCode))));
+        Core core = new Core(new MemoryManager((new Memory(List.of(hltOpCode)))));
 
         core.executeNext();
         Assertions.assertTrue(core.isStopped());
@@ -20,21 +20,15 @@ class CoreTest {
 
     @Test
     void canRestart() {
-        Core core = new Core(createMemManagerWithMemory(new Memory(5)));
+        Core core = new Core(new MemoryManager((new Memory(5))));
 
         core.restart();
     }
 
     @Test
     void newlyCreatedCoreIsntStopped() {
-        Core core = new Core(createMemManagerWithMemory(new Memory(5)));
+        Core core = new Core(new MemoryManager((new Memory(5))));
 
         Assertions.assertFalse(core.isStopped());
-    }
-
-    private MemoryManager createMemManagerWithMemory(Memory mem) {
-        MemoryManager memManager = new MemoryManager();
-        memManager.addReadableWritableDevice(0, mem);
-        return memManager;
     }
 }
