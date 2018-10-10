@@ -3,7 +3,7 @@ package cpu.processing.operations;
 import java.util.List;
 
 public class OpCodes {
-    List<OpCode> opCodes;
+    private List<OpCode> opCodes;
 
     public OpCodes(List<OpCode> opCodes) {
         this.opCodes = opCodes;
