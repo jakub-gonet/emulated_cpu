@@ -19,6 +19,7 @@ public class Operation {
     private int opCodeNum;
     private List<Integer> args;
     private Writable destinationDevice;
+    private int destinationAddress;
 
     public Operation(MemoryManager manager) throws InvalidKeyException {
         this.manager = manager;
@@ -26,27 +27,24 @@ public class Operation {
     }
 
     public int fetch(int currentAddress) throws IllegalStateException {
-        final int addrModeLength = 3;
-        final int addrModeBitFieldLength = (int) Math.pow(2, addrModeLength) - 1;
-        final int argNumLength = 2;
-        final int argNumBitFieldLength = (int) Math.pow(2, argNumLength) - 1;
-        final int maxArgNum = 2;
-
         List<Integer> args = new ArrayList<>();
 
         int opCodeAndAddresses = memory.read(currentAddress++);
-        int argNum = (opCodeAndAddresses >> maxArgNum * addrModeLength) & argNumBitFieldLength;
-        if (argNum > maxArgNum) {
+
+        this.opCodeNum = InstructionDecoder.decodeOpCode(opCodeAndAddresses);
+        int argNum = InstructionDecoder.decodeArgNumber(opCodeAndAddresses);
+
+        if (argNum > InstructionDecoder.maxArgNum()) {
             throw new IllegalStateException("Exceeded max arg number: " + argNum);
         }
 
-        for (int i = 0; i < argNum; i++) {
-            int nextValue = memory.read(currentAddress++);
-            int deviceIdContainingValue = (opCodeAndAddresses >> (maxArgNum - i - 1) * addrModeLength) & addrModeBitFieldLength;
+        for (int i = 0; i < argNum; i++, currentAddress++) {
+            int nextValue = memory.read(currentAddress);
+            int deviceIdContainingValue = InstructionDecoder.decodeAddrMode(i, opCodeAndAddresses);
 
             try {
                 if (i == 0) {
-                    updateDestinationDevice(deviceIdContainingValue);
+                    updateDestinationDevice(deviceIdContainingValue, currentAddress);
                 }
 
                 args.add(valueFromDevice(deviceIdContainingValue, nextValue));
@@ -56,7 +54,6 @@ public class Operation {
             }
         }
 
-        this.opCodeNum = opCodeAndAddresses >> (maxArgNum * addrModeLength + argNumLength);
         this.args = args;
         return currentAddress;
     }
@@ -65,13 +62,18 @@ public class Operation {
         return destinationDevice;
     }
 
+    public int destinationAddress() {
+        return destinationAddress;
+    }
+
     private int valueFromDevice(int deviceId, int address) throws InvalidKeyException {
         Readable device = manager.readableDevice(deviceId);
         return device.read(address);
     }
 
-    private void updateDestinationDevice(int deviceId) throws InvalidKeyException {
+    private void updateDestinationDevice(int deviceId, int address) throws InvalidKeyException {
         destinationDevice = manager.writableDevice(deviceId);
+        destinationAddress = address;
     }
 
     public int opCodeNum() {
