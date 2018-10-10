@@ -49,7 +49,6 @@ public class Operation {
             }
         }
 
-
         this.opCodeNum = opCodeAndAddresses >> (maxArgNum * addrModeLength + argNumLength);
         this.args = args;
         return currentAddress;
