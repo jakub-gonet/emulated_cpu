@@ -6,7 +6,6 @@ import cpu.memory.Writable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +20,9 @@ public class Operation {
     private Writable destinationDevice;
     private int destinationAddress;
 
-    public Operation(MemoryManager manager) throws InvalidKeyException {
+    public Operation(MemoryManager manager) {
         this.manager = manager;
-        this.memory = manager.readableDevice(0);
+        this.memory = manager.readableDevice(1);
     }
 
     public int fetch(int currentAddress) throws IllegalStateException {
@@ -42,16 +41,11 @@ public class Operation {
             int nextValue = memory.read(currentAddress);
             int deviceIdContainingValue = InstructionDecoder.decodeAddrMode(i, opCodeAndAddresses);
 
-            try {
-                if (i == 0) {
-                    updateDestinationDevice(deviceIdContainingValue, currentAddress);
-                }
-
-                args.add(valueFromDevice(deviceIdContainingValue, nextValue));
-            } catch (InvalidKeyException e) {
-                logger.error("Invalid device id: " + deviceIdContainingValue);
-                throw new IllegalStateException("Invalid device id in argument");
+            if (i == 0 && deviceIdContainingValue != 0) {
+                updateDestinationDevice(deviceIdContainingValue, currentAddress);
             }
+
+            args.add(valueFromDevice(deviceIdContainingValue, nextValue));
         }
 
         this.args = args;
@@ -66,12 +60,12 @@ public class Operation {
         return destinationAddress;
     }
 
-    private int valueFromDevice(int deviceId, int address) throws InvalidKeyException {
+    private int valueFromDevice(int deviceId, int address) {
         Readable device = manager.readableDevice(deviceId);
         return device.read(address);
     }
 
-    private void updateDestinationDevice(int deviceId, int address) throws InvalidKeyException {
+    private void updateDestinationDevice(int deviceId, int address) {
         destinationDevice = manager.writableDevice(deviceId);
         destinationAddress = address;
     }
