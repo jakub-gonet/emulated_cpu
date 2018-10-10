@@ -7,7 +7,7 @@ import java.security.InvalidKeyException;
 
 class MemoryManagerTest {
     @Test
-    void canCreateManagerWithDefaultMapping() throws InvalidKeyException {
+    void canCreateManagerWithDefaultMapping() {
         Memory mem = new Memory(1);
         MemoryManager manager = new MemoryManager(mem);
 
@@ -43,7 +43,7 @@ class MemoryManagerTest {
     }
 
     @Test
-    void canGetDeviceWithSubtype() throws InvalidKeyException {
+    void canGetDeviceWithSubtype() {
         Memory mem = new Memory(1);
         MemoryManager manager = new MemoryManager(mem);
         manager.addReadableWritableDevice(16, mem);

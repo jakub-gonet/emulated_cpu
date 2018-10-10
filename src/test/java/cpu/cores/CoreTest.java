@@ -1,18 +1,19 @@
 package cpu.cores;
 
+import cpu.Helpers;
 import cpu.memory.Memory;
 import cpu.memory.MemoryManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.security.InvalidKeyException;
 import java.util.List;
 
 class CoreTest {
     @Test
-    void canExecuteNextOperation() throws InvalidKeyException {
-        int hltOpCode = 5 << 8 | 0 << 6;
-        Core core = new Core(new MemoryManager((new Memory(List.of(hltOpCode)))));
+    void canExecuteNextOperation() {
+        int hltOpCode = Helpers.opCode(1, 0, 0, 0);
+        MemoryManager memoryManager = new MemoryManager(new Memory(List.of(hltOpCode)));
+        Core core = new Core(memoryManager);
 
         core.executeNext();
         Assertions.assertTrue(core.isStopped());

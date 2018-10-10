@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.security.InvalidKeyException;
 import java.util.List;
 
 class OperationTest {
     private Operation op;
 
     @BeforeEach
-    void setup() throws InvalidKeyException {
+    void setup() {
         Memory mem = new Memory(List.of(
                 Helpers.opCode(9, 0, 0, 0),
                 Helpers.opCode(8, 1, 0, 0), 0xcafe,
