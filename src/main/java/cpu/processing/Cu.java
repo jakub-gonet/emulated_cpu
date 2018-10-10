@@ -150,11 +150,30 @@ public class Cu {
         this.statusRegister = ((Registers) memoryManager.readableWritableDevice(1)).statusRegister();
         this.stack = stack;
     }
+
+    public int execute(int PC, Operation operation) {
+        this.PC = PC;
+        OpCode opCode = OP_CODES.byId(operation.opCodeNum());
+        int requiredArgsNum = opCode.requiredArguments();
+
+        Integer result = opCode.applyOperation(operation.args());
+        writeResultIfNecessary(result, operation, requiredArgsNum);
+
+        return this.PC;
+    }
+
     private void setPCto(int to) {
         if (memory.canReadAt(to)) {
             PC = to;
         } else {
             throw new IllegalStateException("Jumping out of memory bounds");
+        }
+    }
+
+    private void writeResultIfNecessary(Integer result, Operation operation, int requiredArgsNum) {
+        if (requiredArgsNum > 0) {
+            operation.destinationDevice()
+                     .write(operation.destinationAddress(), result);
         }
     }
 }
