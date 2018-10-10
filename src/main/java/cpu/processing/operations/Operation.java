@@ -2,6 +2,7 @@ package cpu.processing.operations;
 
 import cpu.memory.MemoryManager;
 import cpu.memory.Readable;
+import cpu.memory.Writable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +18,7 @@ public class Operation {
 
     private int opCodeNum;
     private List<Integer> args;
+    private Writable destinationDevice;
 
     public Operation(MemoryManager manager) throws InvalidKeyException {
         this.manager = manager;
@@ -34,14 +36,19 @@ public class Operation {
 
         int opCodeAndAddresses = memory.read(currentAddress++);
         int argNum = (opCodeAndAddresses >> maxArgNum * addrModeLength) & argNumBitFieldLength;
-        if (argNum > maxArgNum)
+        if (argNum > maxArgNum) {
             throw new IllegalStateException("Exceeded max arg number: " + argNum);
+        }
 
         for (int i = 0; i < argNum; i++) {
             int nextValue = memory.read(currentAddress++);
             int deviceIdContainingValue = (opCodeAndAddresses >> (maxArgNum - i - 1) * addrModeLength) & addrModeBitFieldLength;
 
             try {
+                if (i == 0) {
+                    updateDestinationDevice(deviceIdContainingValue);
+                }
+
                 args.add(valueFromDevice(deviceIdContainingValue, nextValue));
             } catch (InvalidKeyException e) {
                 logger.error("Invalid device id: " + deviceIdContainingValue);
@@ -54,9 +61,17 @@ public class Operation {
         return currentAddress;
     }
 
+    public Writable destinationDevice() {
+        return destinationDevice;
+    }
+
     private int valueFromDevice(int deviceId, int address) throws InvalidKeyException {
         Readable device = manager.readableDevice(deviceId);
         return device.read(address);
+    }
+
+    private void updateDestinationDevice(int deviceId) throws InvalidKeyException {
+        destinationDevice = manager.writableDevice(deviceId);
     }
 
     public int opCodeNum() {
