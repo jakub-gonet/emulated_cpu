@@ -12,7 +12,6 @@ import cpu.processing.operations.Operation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.security.InvalidKeyException;
 import java.util.List;
 
 public class Cu {
@@ -145,9 +144,9 @@ public class Cu {
             )
     );
 
-    public Cu(MemoryManager memoryManager, Stack stack) throws InvalidKeyException {
-        this.memory = memoryManager.readableWritableDevice(0);
-        this.statusRegister = ((Registers) memoryManager.readableWritableDevice(1)).statusRegister();
+    public Cu(MemoryManager memoryManager, Stack stack){
+        this.memory = memoryManager.readableWritableDevice(1);
+        this.statusRegister = ((Registers) memoryManager.readableWritableDevice(2)).statusRegister();
         this.stack = stack;
     }
 
