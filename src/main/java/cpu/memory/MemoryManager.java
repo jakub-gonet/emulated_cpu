@@ -74,11 +74,6 @@ public class MemoryManager {
     private Map<Integer, Map<Type, Object>> deviceMapping = new HashMap<>();
 
     /**
-     * Constructs a new MemoryManager without any mapping.
-     */
-    public MemoryManager() {}
-
-    /**
      * Creates a MemoryManager based on other MemoryManager, creating shallow copy of it.
      *
      * @param manager manager used as template
