@@ -170,7 +170,7 @@ public class Cu {
     }
 
     private void writeResultIfNecessary(Integer result, Operation operation, int requiredArgsNum) {
-        if (requiredArgsNum > 0) {
+        if (requiredArgsNum > 0 && result != null) {
             operation.destinationDevice()
                      .write(operation.destinationAddress(), result);
         }
