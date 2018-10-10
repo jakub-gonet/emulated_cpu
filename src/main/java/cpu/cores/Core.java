@@ -9,8 +9,6 @@ import cpu.processing.operations.Operation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.security.InvalidKeyException;
-
 /**
  * This class resembles a single CPU core.
  */
@@ -32,31 +30,23 @@ class Core {
     Core(MemoryManager memManager) {
         this.registers = new Registers(10);
         this.stack = new Stack();
+        this.memManager = new MemoryManager(memManager, registers);
 
-        boolean success = memManager.addReadableWritableDevice(1, registers) &&
-                memManager.addReadableWritableDevice(2, stack);
-        if (!success)
-            throw new IllegalStateException("Could not create mapping for registers or stack");
-        this.memManager = memManager;
-
-        cu = new Cu();
+        cu = new Cu(this.memManager, stack);
     }
 
     /**
      * Executes next OpCode loaded from Memory on address pointed by ProgramCounter.
      *
-     * @throws InvalidKeyException   if Memory wasn't mapped to id 0
-     * @throws IllegalStateException if OpCode contained device id not mapped in MemoryManager
-     *                               or if OpCode argument count exceeded max argument count
      * @see MemoryManager
      * @see Operation
      * @see Operation#fetch(int)
      */
-    void executeNext() throws InvalidKeyException, IllegalStateException {
+    void executeNext() {
         Operation operation = new Operation(memManager);
         PC = operation.fetch(PC);
 
-        cu.execute(operation);
+        PC = cu.execute(PC, operation);
     }
 
     /**
