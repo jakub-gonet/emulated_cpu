@@ -7,14 +7,11 @@ class RegistersTest {
     @Test
     void canCreateNRegistersAndStatusRegister() {
         Registers registers = new Registers(5);
-        Assertions.assertEquals(6, registers.size());
-
-        registers = new Registers(0);
-        Assertions.assertEquals(1, registers.size());
+        Assertions.assertEquals(5, registers.size());
     }
 
     @Test
-    void creatingNegativeAmountOfRegistersThrowsAnException() {
+    void creatingNegativeOrZeroAmountOfRegistersThrowsAnException() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> new Registers(-1));
     }
 
@@ -27,7 +24,7 @@ class RegistersTest {
 
     @Test
     void canResetRegisters(){
-        Registers registers = new Registers(2);
+        Registers registers = new Registers(3);
         registers.write(0, 15);
         registers.write(1, 5);
         registers.write(2, 10);
@@ -44,7 +41,7 @@ class RegistersTest {
 
     @Test
     void canReadWriteInsideRegistersBounds(){
-        Registers registers = new Registers(2);
+        Registers registers = new Registers(3);
 
         Assertions.assertTrue(registers.canReadAt(0));
         Assertions.assertTrue(registers.canWriteAt(2));
@@ -52,7 +49,7 @@ class RegistersTest {
 
     @Test
     void cantReadOutsideRegistersBounds(){
-        Registers registers = new Registers(2);
+        Registers registers = new Registers(3);
 
         Assertions.assertFalse(registers.canReadAt(-1));
         Assertions.assertFalse(registers.canWriteAt(3));

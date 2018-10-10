@@ -21,11 +21,11 @@ public class Registers implements Readable, Writable {
      * @see Register
      */
     public Registers(int count) {
-        if (count < 0)
+        if (count <= 0)
             throw new IllegalArgumentException();
 
         registers.add(new StatusRegister());
-        registers.addAll(createRegisters(count));
+        registers.addAll(createRegisters(count-1));
     }
 
 
