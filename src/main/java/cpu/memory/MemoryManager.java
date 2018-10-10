@@ -3,6 +3,8 @@ package cpu.memory;
 import cpu.memory.addressing_modes.AddressFromRegister;
 import cpu.memory.addressing_modes.Immediate;
 import cpu.memory.registers.Registers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidKeyException;
 import java.util.HashMap;
@@ -71,6 +73,7 @@ public class MemoryManager {
         READABLE_WRITABLE
     }
 
+    private Logger logger = LogManager.getLogger(MemoryManager.class);
     private Map<Integer, Map<Type, Object>> deviceMapping = new HashMap<>();
 
     /**
@@ -102,12 +105,7 @@ public class MemoryManager {
         this(manager);
 
         Memory mem;
-        try {
-            mem = this.readableWritableDevice(1);
-        } catch (InvalidKeyException e) {
-            throw new IllegalStateException("Main memory isn't accessible with id = 1");
-        }
-
+        mem = this.readableWritableDevice(1);
         addReadableWritableDevice(2, registers);
         addReadableWritableDevice(3, new AddressFromRegister(mem, registers));
     }
@@ -150,10 +148,14 @@ public class MemoryManager {
      *
      * @param id a number mapped to some device
      * @return device implementing Readable interface
-     * @throws InvalidKeyException if given id wasn't mapped to any device or if device with given id didn't implement Readable
      */
-    public Readable readableDevice(int id) throws InvalidKeyException {
-        return (Readable) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE, Type.READABLE_WRITABLE));
+    public Readable readableDevice(int id) {
+        try {
+            return (Readable) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE, Type.READABLE_WRITABLE));
+        } catch (InvalidKeyException e) {
+            logger.error("Readable device with id {} doesn't exist", id);
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -161,10 +163,14 @@ public class MemoryManager {
      *
      * @param id a number mapped to some device
      * @return device implementing Writable interface
-     * @throws InvalidKeyException if given id wasn't mapped to any device or if device with given id didn't implement Writable
      */
-    public Writable writableDevice(int id) throws InvalidKeyException {
-        return (Writable) deviceByTypes(deviceWithTypeById(id), List.of(Type.WRITABLE, Type.READABLE_WRITABLE));
+    public Writable writableDevice(int id) {
+        try {
+            return (Writable) deviceByTypes(deviceWithTypeById(id), List.of(Type.WRITABLE, Type.READABLE_WRITABLE));
+        } catch (InvalidKeyException e) {
+            logger.error("Writable device with id {} doesn't exist", id);
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -172,11 +178,15 @@ public class MemoryManager {
      *
      * @param id a number mapped to some device
      * @return device implementing Readable and Writable interface
-     * @throws InvalidKeyException if given id wasn't mapped to any device or if device with given id didn't implement Readable and Writable
      */
     @SuppressWarnings("unchecked")
-    public <T extends Writable & Readable> T readableWritableDevice(int id) throws InvalidKeyException {
-        return (T) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE_WRITABLE));
+    public <T extends Writable & Readable> T readableWritableDevice(int id) {
+        try {
+            return (T) deviceByTypes(deviceWithTypeById(id), List.of(Type.READABLE_WRITABLE));
+        } catch (InvalidKeyException e) {
+            logger.error("Readable and writable device with id {} doesn't exist", id);
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -219,7 +229,7 @@ public class MemoryManager {
     /**
      * Checks if id is already in use.
      *
-     * @param id
+     * @param id memManager.addReadableWritableDevice(0, mem);
      * @return true if not used, false otherwise
      */
     private boolean isIdNotUsed(int id) {
