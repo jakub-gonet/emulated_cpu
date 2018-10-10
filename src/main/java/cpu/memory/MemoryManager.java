@@ -1,5 +1,9 @@
 package cpu.memory;
 
+import cpu.memory.addressing_modes.AddressFromRegister;
+import cpu.memory.addressing_modes.Immediate;
+import cpu.memory.registers.Registers;
+
 import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +93,28 @@ public class MemoryManager {
      * @param mem a Memory object
      */
     public MemoryManager(Memory mem) {
-        addReadableWritableDevice(0, mem);
+        addReadableDevice(0, new Immediate());
+        addReadableWritableDevice(1, mem);
+    }
+
+    /**
+     * Constructs a new MemoryManager based on passed manager with added registers mappings
+     *
+     * @param manager   a template manager
+     * @param registers a Register object
+     */
+    public MemoryManager(MemoryManager manager, Registers registers) {
+        this(manager);
+
+        Memory mem;
+        try {
+            mem = this.readableWritableDevice(1);
+        } catch (InvalidKeyException e) {
+            throw new IllegalStateException("Main memory isn't accessible with id = 1");
+        }
+
+        addReadableWritableDevice(2, registers);
+        addReadableWritableDevice(3, new AddressFromRegister(mem, registers));
     }
 
     /**
