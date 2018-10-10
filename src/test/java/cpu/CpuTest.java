@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-public class CpuTest {
+class CpuTest {
     @Test
     void canLoadProgramFromDeviceIntoMemory() {
         Cpu cpu = new Cpu(5, 1);

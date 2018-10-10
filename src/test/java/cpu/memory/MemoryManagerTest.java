@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.security.InvalidKeyException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MemoryManagerTest {
     @Test
     void canCreateManagerWithDefaultMapping() throws InvalidKeyException {

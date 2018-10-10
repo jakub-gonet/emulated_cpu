@@ -43,6 +43,6 @@ class StatusRegisterTest {
         Assertions.assertFalse(status.state(StatusFlags.POSITIVE));
         Assertions.assertFalse(status.state(StatusFlags.NEGATIVE));
         Assertions.assertFalse(status.state(StatusFlags.ZERO));
-        Assertions.assertTrue(status.state(StatusFlags.STOPPED)); 
+        Assertions.assertTrue(status.state(StatusFlags.STOPPED));
     }
 }
