@@ -1,5 +1,6 @@
 package cpu.memory;
 
+import cpu.memory.registers.Registers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,23 @@ class MemoryManagerTest {
     }
 
     @Test
+    void canCopyMemoryManager() {
+        MemoryManager memoryManager = new MemoryManager(manager);
+        Assertions.assertNotEquals(memoryManager, manager);
+    }
+
+    @Test
     void canCreateManagerWithDefaultMapping() {
         Assertions.assertEquals(mem, manager.readableWritableDevice(1));
+    }
+
+    @Test
+    void canExtendManagerMappingWithRegisters() {
+        Registers registers = new Registers(2);
+
+        MemoryManager memoryManager = new MemoryManager(manager, registers);
+        Assertions.assertDoesNotThrow(() -> memoryManager.readableDevice(2));
+        Assertions.assertDoesNotThrow(() -> memoryManager.readableDevice(3));
     }
 
     @Test
@@ -50,7 +66,7 @@ class MemoryManagerTest {
     }
 
     @Test
-    void cantUseNotRegisteredDevice(){
+    void cantUseNotRegisteredDevice() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> manager.writableDevice(16));
         Assertions.assertThrows(IllegalArgumentException.class, () -> manager.readableDevice(17));
         Assertions.assertThrows(IllegalArgumentException.class, () -> manager.readableWritableDevice(18));
