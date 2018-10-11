@@ -22,7 +22,7 @@ public class AddressFromRegister implements Readable, Writable {
 
     @Override
     public boolean canReadAt(int address) {
-        return mem.canReadAt(address) && registers.canReadAt(address);
+        return registers.canReadAt(address) && mem.canReadAt(registers.read(address));
     }
 
     @Override
@@ -32,6 +32,6 @@ public class AddressFromRegister implements Readable, Writable {
 
     @Override
     public boolean canWriteAt(int address) {
-        return mem.canWriteAt(address) && registers.canWriteAt(address);
+        return registers.canReadAt(address) && mem.canReadAt(registers.read(address));
     }
 }
