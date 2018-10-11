@@ -71,6 +71,21 @@ class CuTest {
         int PC = operation.fetch(7);
         Assertions.assertThrows(IllegalArgumentException.class, () -> cu.execute(PC, operation));
     }
+
+    @Test
+    void JMP() {
+        int PC = operation.fetch(10);
+        PC = cu.execute(PC, operation);
+
+        Assertions.assertEquals(0, PC);
+    }
+
+    @Test
+    void JMP_intoIllegalAddress(){
+        int PC = operation.fetch(12);
+        Assertions.assertThrows(IllegalStateException.class, () -> cu.execute(PC, operation));
+    }
+
     @Test
     void JE_JNE() {
 
