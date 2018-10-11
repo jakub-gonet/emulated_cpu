@@ -37,8 +37,8 @@ public class Operation {
             throw new IllegalStateException("Exceeded max arg number: " + argNum);
         }
 
-        for (int i = 0; i < argNum; i++, currentAddress++) {
-            int nextValue = memory.read(currentAddress);
+        for (int i = 0; i < argNum; i++) {
+            int nextValue = memory.read(currentAddress++);
             int deviceIdContainingValue = InstructionDecoder.decodeAddrMode(i, opCodeAndAddresses);
 
             if (i == 0 && deviceIdContainingValue != 0) {
