@@ -143,7 +143,24 @@ class CuTest {
 
     @Test
     void JG_JGE() {
+        mem = new Memory(List.of(
+                Helpers.opCode(26, 2, 0, 0), 2, 1,
+                Helpers.opCode(8, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 1, 1,
+                Helpers.opCode(8, 1, 0, 0), 0,
 
+                Helpers.opCode(26, 2, 0, 0), 1, 1,
+                Helpers.opCode(9, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), -2, 1,
+                Helpers.opCode(9, 1, 0, 0), 0
+        ));
+        init(mem);
+
+        Assertions.assertEquals(0, runNCommandsFrom(0, 2));
+        Assertions.assertEquals(10, runNCommandsFrom(5, 2));
+
+        Assertions.assertEquals(0, runNCommandsFrom(10, 2));
+        Assertions.assertEquals(20, runNCommandsFrom(15, 2));
     }
 
     @Test
@@ -174,7 +191,7 @@ class CuTest {
     private void init(Memory mem) {
         registers = new Registers(8);
         manager = new MemoryManager(new MemoryManager(mem), registers);
-        cu = new Cu(manager, new Stack());
+        cu = new Cu(manager, new Stack(2));
         operation = new Operation(manager);
     }
 
