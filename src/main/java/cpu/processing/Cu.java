@@ -22,43 +22,43 @@ public class Cu {
     private Stack stack;
 
     private final OpCodes OP_CODES = new OpCodes(
-            List.of(//NOP
+            List.of(//NOP - 0
                     new OpCode((_x, _y) -> null, 0),
-                    //HLT
+                    //HLT - 1
                     new OpCode((_x, _y) -> {
                         logger.info("Stopping...");
                         statusRegister.set(StatusFlags.STOPPED, true);
                         return null;
                     }, 0),
-                    //MOV
+                    //MOV - 2
                     new OpCode((_to, from) -> from, 2),
-                    //JMP
+                    //JMP - 3
                     new OpCode((to, _y) -> {
                         setPCto(to);
                         return null;
                     }, 1),
-                    //JE
+                    //JE - 4
                     new OpCode((to, _y) -> {
                         if (statusRegister.state(StatusFlags.ZERO)) {
                             setPCto(to);
                         }
                         return null;
                     }, 1),
-                    //JNE
+                    //JNE - 5
                     new OpCode((to, _y) -> {
                         if (!statusRegister.state(StatusFlags.ZERO)) {
                             setPCto(to);
                         }
                         return null;
                     }, 1),
-                    //JL
+                    //JL - 6
                     new OpCode((to, _y) -> {
                         if (statusRegister.state(StatusFlags.NEGATIVE)) {
                             setPCto(to);
                         }
                         return null;
                     }, 1),
-                    //JLE
+                    //JLE - 7
                     new OpCode((to, _y) -> {
                         if (statusRegister.state(StatusFlags.NEGATIVE)
                                 || statusRegister.state(StatusFlags.ZERO)) {
@@ -66,14 +66,14 @@ public class Cu {
                         }
                         return null;
                     }, 1),
-                    //JG
+                    //JG - 8
                     new OpCode((to, _y) -> {
                         if (statusRegister.state(StatusFlags.POSITIVE)) {
                             setPCto(to);
                         }
                         return null;
                     }, 1),
-                    //JGE
+                    //JGE - 9
                     new OpCode((to, _y) -> {
                         if (statusRegister.state(StatusFlags.POSITIVE)
                                 || statusRegister.state(StatusFlags.ZERO)) {
@@ -81,51 +81,51 @@ public class Cu {
                         }
                         return null;
                     }, 1),
-                    //PUSH
+                    //PUSH - 10
                     new OpCode((arg, _y) -> {
                         stack.push(arg);
                         return null;
                     }, 1),
-                    //POP
+                    //POP - 11
                     new OpCode((_x, _y) -> {
                         return stack.pop();
                     }, 0),
-                    //CALL
+                    //CALL - 12
                     new OpCode((f_addr, _y) -> {
                         stack.push(PC);
                         setPCto(f_addr);
                         return null;
                     }, 1),
-                    //RET
+                    //RET - 13
                     new OpCode((_x, _y) -> {
                         setPCto(stack.pop());
                         return null;
                     }, 0),
-                    //INC
+                    //INC - 14
                     new OpCode((x, _y) -> ++x, 1),
-                    //DEC
+                    //DEC - 15
                     new OpCode((x, _y) -> --x, 1),
-                    //ADD
+                    //ADD - 16
                     new OpCode((x, y) -> x + y, 2),
-                    //SUB
+                    //SUB - 17
                     new OpCode((x, y) -> x - y, 2),
-                    //MUL
+                    //MUL - 18
                     new OpCode((x, y) -> x * y, 2),
-                    //DIV
+                    //DIV - 19
                     new OpCode((x, y) -> x / y, 2),
-                    //NOT
+                    //NOT - 20
                     new OpCode((x, _y) -> ~x, 1),
-                    //AND
+                    //AND - 21
                     new OpCode((x, y) -> x & y, 2),
-                    //OR
+                    //OR - 22
                     new OpCode((x, y) -> x | y, 2),
-                    //RSHIFT
+                    //RSHIFT - 23
                     new OpCode((x, y) -> x >> y, 2),
-                    //LSHIFT
+                    //LSHIFT - 24
                     new OpCode((x, y) -> x << y, 2),
-                    //XOR
+                    //XOR - 25
                     new OpCode((x, y) -> x ^ y, 2),
-                    //CMP
+                    //CMP - 26
                     new OpCode((x, y) -> {
                         int result = x - y;
                         StatusRegister.StatusFlags flag;
@@ -144,7 +144,7 @@ public class Cu {
             )
     );
 
-    public Cu(MemoryManager memoryManager, Stack stack){
+    public Cu(MemoryManager memoryManager, Stack stack) {
         this.memory = memoryManager.readableWritableDevice(1);
         this.statusRegister = ((Registers) memoryManager.readableWritableDevice(2)).statusRegister();
         this.stack = stack;
@@ -156,8 +156,8 @@ public class Cu {
         int requiredArgsNum = opCode.requiredArguments();
 
         Integer result = opCode.applyOperation(operation.args());
+        logger.info("Executed {} opcode with {} args, got {} in result", operation.opCodeNum(), operation.args(), result);
         writeResultIfNecessary(result, operation, requiredArgsNum);
-
         return this.PC;
     }
 
@@ -171,6 +171,7 @@ public class Cu {
 
     private void writeResultIfNecessary(Integer result, Operation operation, int requiredArgsNum) {
         if (requiredArgsNum > 0 && result != null) {
+            logger.info("Writing {} to {} device at {} address", result, operation.destinationDevice(), operation.destinationAddress());
             operation.destinationDevice()
                      .write(operation.destinationAddress(), result);
         }
