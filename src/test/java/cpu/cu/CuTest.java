@@ -38,6 +38,10 @@ class CuTest {
                 Helpers.opCode(26, 2, 0, 0), 1, 1,
                 Helpers.opCode(4, 1, 0, 0), 0,
                 Helpers.opCode(26, 2, 0, 0), 1, 2,
+                Helpers.opCode(4, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 3, 4,
+                Helpers.opCode(5, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 4, 4,
                 Helpers.opCode(5, 1, 0, 0), 0
         ));
         registers = new Registers(8);
@@ -84,14 +88,18 @@ class CuTest {
     }
 
     @Test
-    void JMP_intoIllegalAddress(){
+    void JMP_intoIllegalAddress() {
         int PC = operation.fetch(12);
         Assertions.assertThrows(IllegalStateException.class, () -> cu.execute(PC, operation));
     }
 
     @Test
     void JE_JNE() {
+        Assertions.assertEquals(0, runNCommandsFrom(14, 2));
+        Assertions.assertEquals(24, runNCommandsFrom(19, 2));
 
+        Assertions.assertEquals(0, runNCommandsFrom(24, 2));
+        Assertions.assertEquals(34, runNCommandsFrom(29, 2));
     }
 
     @Test
