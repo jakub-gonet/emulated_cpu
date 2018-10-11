@@ -27,6 +27,7 @@ class CuTest {
                 -1,
                 5,
                 Helpers.opCode(0, 0, 0, 0),
+                Helpers.opCode(1, 0, 0, 0),
                 Helpers.opCode(3, 1, 0, 0), 0,
                 Helpers.opCode(26, 2, 0, 0), 1, 1,
                 Helpers.opCode(4, 1, 0, 0), 0,
@@ -47,7 +48,11 @@ class CuTest {
 
     @Test
     void HLT() {
-     
+        int PC = operation.fetch(3);
+        cu.execute(PC, operation);
+
+        Assertions.assertTrue(registers.statusRegister()
+                                       .state(StatusRegister.StatusFlags.STOPPED));
     }
 
     @Test
