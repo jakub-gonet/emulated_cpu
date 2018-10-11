@@ -11,15 +11,17 @@ import java.util.List;
 
 class OperationTest {
     private Operation op;
+    private Memory mem;
 
     @BeforeEach
     void setup() {
-        Memory mem = new Memory(List.of(
+        mem = new Memory(List.of(
                 Helpers.opCode(9, 0, 0, 0),
                 Helpers.opCode(8, 1, 0, 0), 0xcafe,
                 Helpers.opCode(7, 2, 0, 0), 0xcafe, 0xbabe,
                 Helpers.opCode(6, 1, 5, 0), 0,
-                Helpers.opCode(5, 3, 0, 0)
+                Helpers.opCode(5, 3, 0, 0),
+                Helpers.opCode(2, 2, 1, 0), 2, -5
         ));
         MemoryManager manager = new MemoryManager(mem);
         this.op = new Operation(manager);
@@ -55,5 +57,12 @@ class OperationTest {
     @Test
     void fetchingOpCodeWithInvalidArgNumberThrowAnException() {
         Assertions.assertThrows(IllegalStateException.class, () -> op.fetch(8));
+    }
+
+    @Test
+    void fetchingValidOpcodeUpdatesDestinationDeviceCorrectly() {
+        op.fetch(9);
+        Assertions.assertEquals(2, op.destinationAddress());
+        Assertions.assertEquals(mem, op.destinationDevice());
     }
 }
