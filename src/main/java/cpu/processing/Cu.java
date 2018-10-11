@@ -3,6 +3,7 @@ package cpu.processing;
 import cpu.memory.Memory;
 import cpu.memory.MemoryManager;
 import cpu.memory.Stack;
+import cpu.memory.Writable;
 import cpu.memory.registers.Registers;
 import cpu.memory.registers.StatusRegister;
 import cpu.memory.registers.StatusRegister.StatusFlags;
@@ -17,6 +18,7 @@ import java.util.List;
 public class Cu {
     private Logger logger = LogManager.getLogger(Cu.class);
     private int PC;
+    private MemoryManager manager;
     private StatusRegister statusRegister;
     private Memory memory;
     private Stack stack;
@@ -145,6 +147,7 @@ public class Cu {
     );
 
     public Cu(MemoryManager memoryManager, Stack stack) {
+        this.manager = memoryManager;
         this.memory = memoryManager.readableWritableDevice(1);
         this.statusRegister = ((Registers) memoryManager.readableWritableDevice(2)).statusRegister();
         this.stack = stack;
@@ -171,9 +174,11 @@ public class Cu {
 
     private void writeResultIfNecessary(Integer result, Operation operation, int requiredArgsNum) {
         if (requiredArgsNum > 0 && result != null) {
-            logger.info("Writing {} to {} device at {} address", result, operation.destinationDevice(), operation.destinationAddress());
-            operation.destinationDevice()
-                     .write(operation.destinationAddress(), result);
+            Writable device = manager.writableDevice(operation.destinationDeviceId());
+            int destination = operation.destinationAddress();
+            logger.info("Writing {} to {} device at {} address", result, device, destination);
+
+            device.write(destination, result);
         }
     }
 }
