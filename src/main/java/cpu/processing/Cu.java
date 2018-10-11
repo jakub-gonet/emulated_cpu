@@ -31,7 +31,7 @@ public class Cu {
                         return null;
                     }, 0),
                     //MOV
-                    new OpCode((_from, to) -> to, 2),
+                    new OpCode((_to, from) -> from, 2),
                     //JMP
                     new OpCode((to, _y) -> {
                         setPCto(to);
