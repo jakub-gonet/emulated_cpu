@@ -28,7 +28,10 @@ class CuTest {
                 5,
                 Helpers.opCode(0, 0, 0, 0),
                 Helpers.opCode(1, 0, 0, 0),
+                Helpers.opCode(2, 2, 1, 0), 1, 50,
+                Helpers.opCode(2, 2, 0, 0), 1, 42,
                 Helpers.opCode(3, 1, 0, 0), 0,
+                Helpers.opCode(3, 1, 0, 0), -1,
                 Helpers.opCode(26, 2, 0, 0), 1, 1,
                 Helpers.opCode(4, 1, 0, 0), 0,
                 Helpers.opCode(26, 2, 0, 0), 1, 2,
@@ -55,6 +58,19 @@ class CuTest {
                                        .state(StatusRegister.StatusFlags.STOPPED));
     }
 
+    @Test
+    void MOV() {
+        int PC = operation.fetch(4);
+        cu.execute(PC, operation);
+
+        Assertions.assertEquals(50, mem.read(1));
+    }
+
+    @Test
+    void MOV_withImmediateWriteAddress() {
+        int PC = operation.fetch(7);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> cu.execute(PC, operation));
+    }
     @Test
     void JE_JNE() {
 
