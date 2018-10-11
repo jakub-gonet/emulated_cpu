@@ -42,7 +42,7 @@ public class Operation {
             int deviceIdContainingValue = InstructionDecoder.decodeAddrMode(i, opCodeAndAddresses);
 
             if (i == 0 && deviceIdContainingValue != 0) {
-                updateDestinationDevice(deviceIdContainingValue, currentAddress);
+                updateDestinationDevice(deviceIdContainingValue, nextValue);
             }
 
             args.add(valueFromDevice(deviceIdContainingValue, nextValue));
