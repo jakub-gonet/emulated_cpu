@@ -246,9 +246,4 @@ public class MemoryManager {
     private Map<Type, Object> createDeviceMapping(Type type, Object device) {
         return new HashMap<>(Map.of(type, device));
     }
-
-    @Override
-    public String toString() {
-        return deviceMapping.toString();
-    }
 }
