@@ -3,8 +3,6 @@ package cpu.memory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.security.InvalidKeyException;
-
 class MemoryManagerTest {
     @Test
     void canCreateManagerWithDefaultMapping() {
@@ -38,8 +36,8 @@ class MemoryManagerTest {
         manager.addReadableDevice(16, mem);
         manager.addWritableDevice(17, mem);
 
-        Assertions.assertThrows(InvalidKeyException.class, () -> manager.writableDevice(16));
-        Assertions.assertThrows(InvalidKeyException.class, () -> manager.readableWritableDevice(17));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> manager.writableDevice(16));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> manager.readableWritableDevice(17));
     }
 
     @Test
