@@ -83,6 +83,7 @@ public class MemoryManager {
      */
     public MemoryManager(MemoryManager manager) {
         this.deviceMapping = new HashMap<>(manager.deviceMapping);
+        this.logger = manager.logger;
     }
 
     /**
