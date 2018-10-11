@@ -8,6 +8,8 @@ import cpu.memory.registers.Registers;
 import cpu.memory.registers.StatusRegister;
 import cpu.processing.Cu;
 import cpu.processing.operations.Operation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ class CuTest {
     private Cu cu;
     private Operation operation;
     private Registers registers;
+    private Logger logger = LogManager.getLogger(CuTest.class);
 
     @BeforeEach
     void setup() {
@@ -124,6 +127,15 @@ class CuTest {
     @Test
     void CMP() {
 
+    }
+
+    private int runNCommandsFrom(int startingPC, int n) {
+        int PC = startingPC;
+        for (int i = 0; i < n; i++) {
+            PC = cu.execute(operation.fetch(PC), operation);
+        }
+
+        return PC;
     }
 }
 
