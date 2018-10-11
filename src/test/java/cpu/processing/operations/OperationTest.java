@@ -63,6 +63,6 @@ class OperationTest {
     void fetchingValidOpcodeUpdatesDestinationDeviceCorrectly() {
         op.fetch(9);
         Assertions.assertEquals(2, op.destinationAddress());
-        Assertions.assertEquals(mem, op.destinationDevice());
+        Assertions.assertEquals(1, op.destinationDeviceId());
     }
 }

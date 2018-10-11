@@ -2,7 +2,6 @@ package cpu.processing.operations;
 
 import cpu.memory.MemoryManager;
 import cpu.memory.Readable;
-import cpu.memory.Writable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +16,7 @@ public class Operation {
 
     private int opCodeNum;
     private List<Integer> args;
-    private Writable destinationDevice;
+    private int destinationDeviceId;
     private int destinationAddress;
 
     public Operation(MemoryManager manager) {
@@ -52,8 +51,8 @@ public class Operation {
         return currentAddress;
     }
 
-    public Writable destinationDevice() {
-        return destinationDevice;
+    public int destinationDeviceId() {
+        return destinationDeviceId;
     }
 
     public int destinationAddress() {
@@ -66,7 +65,7 @@ public class Operation {
     }
 
     private void updateDestinationDevice(int deviceId, int address) {
-        destinationDevice = manager.writableDevice(deviceId);
+        destinationDeviceId = deviceId;
         destinationAddress = address;
     }
 
