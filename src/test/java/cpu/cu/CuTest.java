@@ -5,6 +5,7 @@ import cpu.memory.Memory;
 import cpu.memory.MemoryManager;
 import cpu.memory.Stack;
 import cpu.memory.registers.Registers;
+import cpu.memory.registers.StatusRegister;
 import cpu.processing.Cu;
 import cpu.processing.operations.Operation;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +19,7 @@ class CuTest {
     private MemoryManager manager;
     private Cu cu;
     private Operation operation;
+    private Registers registers;
 
     @BeforeEach
     void setup() {
@@ -31,7 +33,8 @@ class CuTest {
                 Helpers.opCode(26, 2, 0, 0), 1, 2,
                 Helpers.opCode(5, 1, 0, 0), 0
         ));
-        manager = new MemoryManager(new MemoryManager(mem), new Registers(8));
+        registers = new Registers(8);
+        manager = new MemoryManager(new MemoryManager(mem), registers);
         cu = new Cu(manager, new Stack());
         operation = new Operation(manager);
     }
@@ -44,7 +47,7 @@ class CuTest {
 
     @Test
     void HLT() {
-
+     
     }
 
     @Test
