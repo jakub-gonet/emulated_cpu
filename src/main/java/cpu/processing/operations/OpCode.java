@@ -25,7 +25,7 @@ public class OpCode {
     public Integer applyOperation(List<Integer> args) {
         if (args.size() != requiredArguments) {
             logger.error("OP code have {} arguments, when {} arguments are required", args.size(), requiredArguments);
-            throw new IllegalStateException("Arguments number not matching");
+            throw new IllegalArgumentException("Arguments number not matching");
         }
 
         ArrayList<Integer> argsCopy = new ArrayList<>(args);
