@@ -11,7 +11,6 @@ import cpu.processing.operations.Operation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -24,41 +23,25 @@ class CuTest {
     private Registers registers;
     private Logger logger = LogManager.getLogger(CuTest.class);
 
-    @BeforeEach
-    void setup() {
-        mem = new Memory(List.of(
-                -1,
-                5,
-                Helpers.opCode(0, 0, 0, 0),
-                Helpers.opCode(1, 0, 0, 0),
-                Helpers.opCode(2, 2, 1, 0), 1, 50,
-                Helpers.opCode(2, 2, 0, 0), 1, 42,
-                Helpers.opCode(3, 1, 0, 0), 0,
-                Helpers.opCode(3, 1, 0, 0), -1,
-                Helpers.opCode(26, 2, 0, 0), 1, 1,
-                Helpers.opCode(4, 1, 0, 0), 0,
-                Helpers.opCode(26, 2, 0, 0), 1, 2,
-                Helpers.opCode(4, 1, 0, 0), 0,
-                Helpers.opCode(26, 2, 0, 0), 3, 4,
-                Helpers.opCode(5, 1, 0, 0), 0,
-                Helpers.opCode(26, 2, 0, 0), 4, 4,
-                Helpers.opCode(5, 1, 0, 0), 0
-        ));
-        registers = new Registers(8);
-        manager = new MemoryManager(new MemoryManager(mem), registers);
-        cu = new Cu(manager, new Stack());
-        operation = new Operation(manager);
-    }
-
     @Test
     void NOP() {
-        int PC = operation.fetch(2);
+        mem = new Memory(List.of(
+                Helpers.opCode(0, 0, 0, 0)
+        ));
+        init(mem);
+
+        int PC = operation.fetch(0);
         Assertions.assertDoesNotThrow(() -> cu.execute(PC, operation));
     }
 
     @Test
     void HLT() {
-        int PC = operation.fetch(3);
+        mem = new Memory(List.of(
+                Helpers.opCode(1, 0, 0, 0)
+        ));
+        init(mem);
+
+        int PC = operation.fetch(0);
         cu.execute(PC, operation);
 
         Assertions.assertTrue(registers.statusRegister()
@@ -67,21 +50,37 @@ class CuTest {
 
     @Test
     void MOV() {
-        int PC = operation.fetch(4);
+        mem = new Memory(List.of(
+                5,
+                Helpers.opCode(2, 2, 1, 0), 0, 50
+        ));
+        init(mem);
+
+        int PC = operation.fetch(1);
         cu.execute(PC, operation);
 
-        Assertions.assertEquals(50, mem.read(1));
+        Assertions.assertEquals(50, mem.read(0));
     }
 
     @Test
     void MOV_withImmediateWriteAddress() {
-        int PC = operation.fetch(7);
+        mem = new Memory(List.of(
+                Helpers.opCode(2, 2, 0, 0), 1, 42
+        ));
+        init(mem);
+
+        int PC = operation.fetch(0);
         Assertions.assertThrows(IllegalArgumentException.class, () -> cu.execute(PC, operation));
     }
 
     @Test
     void JMP() {
-        int PC = operation.fetch(10);
+        mem = new Memory(List.of(
+                Helpers.opCode(3, 1, 0, 0), 0
+        ));
+        init(mem);
+
+        int PC = operation.fetch(0);
         PC = cu.execute(PC, operation);
 
         Assertions.assertEquals(0, PC);
@@ -89,22 +88,57 @@ class CuTest {
 
     @Test
     void JMP_intoIllegalAddress() {
-        int PC = operation.fetch(12);
+        mem = new Memory(List.of(
+                Helpers.opCode(3, 1, 0, 0), -1
+        ));
+        init(mem);
+
+        int PC = operation.fetch(0);
         Assertions.assertThrows(IllegalStateException.class, () -> cu.execute(PC, operation));
     }
 
     @Test
     void JE_JNE() {
-        Assertions.assertEquals(0, runNCommandsFrom(14, 2));
-        Assertions.assertEquals(24, runNCommandsFrom(19, 2));
+        mem = new Memory(List.of(
+                Helpers.opCode(26, 2, 0, 0), 1, 1,
+                Helpers.opCode(4, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 1, 2,
+                Helpers.opCode(4, 1, 0, 0), 0,
 
-        Assertions.assertEquals(0, runNCommandsFrom(24, 2));
-        Assertions.assertEquals(34, runNCommandsFrom(29, 2));
+                Helpers.opCode(26, 2, 0, 0), 3, 4,
+                Helpers.opCode(5, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 4, 4,
+                Helpers.opCode(5, 1, 0, 0), 0
+        ));
+        init(mem);
+
+        Assertions.assertEquals(0, runNCommandsFrom(0, 2));
+        Assertions.assertEquals(10, runNCommandsFrom(5, 2));
+
+        Assertions.assertEquals(0, runNCommandsFrom(10, 2));
+        Assertions.assertEquals(20, runNCommandsFrom(15, 2));
     }
 
     @Test
     void JL_JLE() {
+        mem = new Memory(List.of(
+                Helpers.opCode(26, 2, 0, 0), -1, 1,
+                Helpers.opCode(6, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 1, 1,
+                Helpers.opCode(6, 1, 0, 0), 0,
 
+                Helpers.opCode(26, 2, 0, 0), 1, 1,
+                Helpers.opCode(7, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 2, 1,
+                Helpers.opCode(7, 1, 0, 0), 0
+        ));
+        init(mem);
+
+        Assertions.assertEquals(0, runNCommandsFrom(0, 2));
+        Assertions.assertEquals(10, runNCommandsFrom(5, 2));
+
+        Assertions.assertEquals(0, runNCommandsFrom(10, 2));
+        Assertions.assertEquals(20, runNCommandsFrom(15, 2));
     }
 
     @Test
@@ -135,6 +169,13 @@ class CuTest {
     @Test
     void CMP() {
 
+    }
+
+    private void init(Memory mem) {
+        registers = new Registers(8);
+        manager = new MemoryManager(new MemoryManager(mem), registers);
+        cu = new Cu(manager, new Stack());
+        operation = new Operation(manager);
     }
 
     private int runNCommandsFrom(int startingPC, int n) {
