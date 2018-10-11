@@ -82,7 +82,7 @@ public class StatusRegister extends Register {
     /**
      * Resets POSITIVE, NEGATIVE AND ZERO flags
      */
-    void resetArithmeticFlags() {
+    public void resetArithmeticFlags() {
         this.set(this.value() & ~(0x7));
     }
 

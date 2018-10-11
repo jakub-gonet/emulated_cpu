@@ -140,6 +140,8 @@ public class Cu {
                             flag = StatusRegister.StatusFlags.NEGATIVE;
                         }
 
+                        logger.info("Setting {} flag", flag);
+                        statusRegister.resetArithmeticFlags();
                         statusRegister.set(flag, true);
                         return null;
                     }, 2)
@@ -166,6 +168,7 @@ public class Cu {
 
     private void setPCto(int to) {
         if (memory.canReadAt(to)) {
+            logger.info("Jumping to {} address", PC);
             PC = to;
         } else {
             throw new IllegalStateException("Jumping out of memory bounds");
