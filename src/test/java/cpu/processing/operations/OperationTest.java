@@ -49,7 +49,7 @@ class OperationTest {
 
     @Test
     void fetchingFromDeviceWithInvalidIdThrowsAnException() {
-        Assertions.assertThrows(IllegalStateException.class, () -> op.fetch(6));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> op.fetch(6));
     }
 
     @Test
