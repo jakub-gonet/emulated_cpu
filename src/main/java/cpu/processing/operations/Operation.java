@@ -41,7 +41,7 @@ public class Operation {
             int nextValue = memory.read(currentAddress++);
             int deviceIdContainingValue = InstructionDecoder.decodeAddrMode(i, opCodeAndAddresses);
 
-            if (i == 0 && deviceIdContainingValue != 0) {
+            if (i == 0) {
                 updateDestinationDevice(deviceIdContainingValue, nextValue);
             }
 
