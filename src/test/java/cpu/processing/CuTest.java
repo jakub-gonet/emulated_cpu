@@ -200,17 +200,17 @@ class CuTest {
     void CALL_RET() {
         mem = new Memory(List.of(
                 Helpers.opCode(12, 1, 0, 0), 3,
-                Helpers.opCode(0,0,0,0),
+                Helpers.opCode(0, 0, 0, 0),
                 Helpers.opCode(13, 0, 0, 0)
         ));
         init(mem);
 
 
-        int PC = runNCommandsFrom(0,1);
+        int PC = runNCommandsFrom(0, 1);
         Assertions.assertFalse(stack.isEmpty());
         Assertions.assertEquals(3, PC);
 
-        PC = runNCommandsFrom(PC,1);
+        PC = runNCommandsFrom(PC, 1);
         Assertions.assertEquals(2, PC);
     }
 
@@ -232,7 +232,7 @@ class CuTest {
     }
 
     @Test
-    void ADD_SUB(){
+    void ADD_SUB() {
         mem = new Memory(List.of(
                 5,
                 3,
@@ -246,6 +246,26 @@ class CuTest {
 
         runNCommandsFrom(PC, 1);
         Assertions.assertEquals(-5, mem.read(1));
+    }
+
+    @Test
+    void MUL_DIV() {
+        mem = new Memory(List.of(
+                5,
+                24,
+                Helpers.opCode(18, 2, 1, 1), 0, 0,
+                Helpers.opCode(19, 2, 1, 0), 1, 8,
+                Helpers.opCode(19, 2, 1, 0), 1, 0
+        ));
+        init(mem);
+
+        int PC = runNCommandsFrom(2, 1);
+        Assertions.assertEquals(25, mem.read(0));
+
+        int PC2 = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(3, mem.read(1));
+
+        Assertions.assertThrows(ArithmeticException.class, () -> runNCommandsFrom(PC2, 1));
     }
 
     @Test
