@@ -25,11 +25,14 @@ class Core {
      * Creates a new Core with memory mapping from MemoryManager
      *
      * @param memManager a MemoryManager
-     * @throws IllegalStateException if mapping for id 1 or 2 already exists in provided MemoryManager
      */
     Core(MemoryManager memManager) {
-        this.registers = new Registers(10);
-        this.stack = new Stack();
+        this(memManager, 16, 64);
+    }
+
+    Core(MemoryManager memManager, int registersCount, int stackCapacity) {
+        this.registers = new Registers(registersCount);
+        this.stack = new Stack(stackCapacity);
         this.memManager = new MemoryManager(memManager, registers);
 
         cu = new Cu(this.memManager, stack);
