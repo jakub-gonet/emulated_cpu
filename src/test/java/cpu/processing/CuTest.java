@@ -6,7 +6,6 @@ import cpu.memory.MemoryManager;
 import cpu.memory.Stack;
 import cpu.memory.registers.Registers;
 import cpu.memory.registers.StatusRegister;
-import cpu.processing.Cu;
 import cpu.processing.operations.Operation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -202,7 +201,20 @@ class CuTest {
 
     @Test
     void CALL_RET() {
+        mem = new Memory(List.of(
+                Helpers.opCode(12, 1, 0, 0), 3,
+                Helpers.opCode(0,0,0,0),
+                Helpers.opCode(13, 0, 0, 0)
+        ));
+        init(mem);
 
+
+        int PC = cu.execute(operation.fetch(0), operation);
+        Assertions.assertFalse(stack.isEmpty());
+        Assertions.assertEquals(3, PC);
+
+        PC = cu.execute(operation.fetch(PC), operation);
+        Assertions.assertEquals(2, PC);
     }
 
     @Test
@@ -223,7 +235,8 @@ class CuTest {
     private void init(Memory mem) {
         registers = new Registers(8);
         manager = new MemoryManager(new MemoryManager(mem), registers);
-        cu = new Cu(manager, new Stack(2));
+        stack = new Stack(2);
+        cu = new Cu(manager, stack);
         operation = new Operation(manager);
     }
 
