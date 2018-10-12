@@ -37,4 +37,8 @@ public class Stack {
         logger.info("Popped {} from stack", value);
         return value;
     }
+
+    public int size() {
+        return size;
+    }
 }
