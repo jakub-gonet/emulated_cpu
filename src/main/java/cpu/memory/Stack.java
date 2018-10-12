@@ -1,26 +1,40 @@
 package cpu.memory;
 
-public class Stack implements Readable, Writable {
-    @Override
-    public int read(int address) {
-        return 0;
-    }
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    @Override
-    public boolean canReadAt(int address) {
-        return false;
-    }
+public class Stack {
+    private Logger logger = LogManager.getLogger(Stack.class);
+    private java.util.Stack<Integer> stack;
+    private int size;
 
-    @Override
-    public void write(int address, int data) {
-
-    }
-
-    @Override
-    public boolean canWriteAt(int address) {
-        return false;
+    public Stack(int size) {
+        this.stack = new java.util.Stack<>();
+        this.size = size;
     }
 
     public void reset() {
+        logger.info("Reset stack");
+        stack.clear();
+    }
+
+    public void push(Integer arg) {
+        if (stack.size() < size) {
+            logger.info("Pushing {} into a stack", arg);
+            stack.push(arg);
+        } else {
+            logger.error("Stack overflow when pushing {} to the stack", arg);
+            throw new IllegalStateException("Stack overflow");
+        }
+    }
+
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
+    public int pop() {
+        int value = stack.pop();
+        logger.info("Popped {} from stack", value);
+        return value;
     }
 }
