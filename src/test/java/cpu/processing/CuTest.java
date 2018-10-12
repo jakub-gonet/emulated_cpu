@@ -270,7 +270,39 @@ class CuTest {
 
     @Test
     void logicOpCodes() {
+        mem = new Memory(List.of(
+                -1,
+                5,
+                1,
+                4,
+                2,
+                -1,
+                Helpers.opCode(20, 1, 1, 0), 0,
+                Helpers.opCode(21, 2, 1, 0), 1, 4,
+                Helpers.opCode(22, 2, 1, 0), 2, 8,
+                Helpers.opCode(23, 2, 1, 0), 3, 1,
+                Helpers.opCode(24, 2, 1, 0), 4, 2,
+                Helpers.opCode(25, 2, 1, 0), 5, -2
+        ));
+        init(mem);
 
+        int PC = runNCommandsFrom(6, 1);
+        Assertions.assertEquals(0, mem.read(0));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(4, mem.read(1));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(9, mem.read(2));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(2, mem.read(3));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(8, mem.read(4));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(1, mem.read(5));
     }
 
     @Test
