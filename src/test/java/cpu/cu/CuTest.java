@@ -20,6 +20,7 @@ class CuTest {
     private Cu cu;
     private Operation operation;
     private Registers registers;
+    private Stack stack;
 
     @Test
     void NOP() {
@@ -222,7 +223,8 @@ class CuTest {
     private void init(Memory mem) {
         registers = new Registers(8);
         manager = new MemoryManager(new MemoryManager(mem), registers);
-        cu = new Cu(manager, new Stack(2));
+        stack = new Stack(2);
+        cu = new Cu(manager, stack);
         operation = new Operation(manager);
     }
 
