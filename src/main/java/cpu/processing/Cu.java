@@ -89,9 +89,7 @@ public class Cu {
                         return null;
                     }, 1),
                     //POP - 11
-                    new OpCode((_x, _y) -> {
-                        return stack.pop();
-                    }, 1),
+                    new OpCode((_x, _y) -> stack.pop(), 1),
                     //CALL - 12
                     new OpCode((f_addr, _y) -> {
                         stack.push(PC);
