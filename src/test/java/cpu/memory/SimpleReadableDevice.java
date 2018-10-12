@@ -1,6 +1,4 @@
-package cpu.cu;
-
-import cpu.memory.Readable;
+package cpu.memory;
 
 import java.util.ArrayList;
 import java.util.Collections;

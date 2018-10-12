@@ -1,6 +1,6 @@
 package cpu;
 
-import cpu.cu.SimpleReadableDevice;
+import cpu.memory.SimpleReadableDevice;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package cpu.cu;
+package cpu.processing;
 
 import cpu.Helpers;
 import cpu.memory.Memory;
@@ -223,8 +223,7 @@ class CuTest {
     private void init(Memory mem) {
         registers = new Registers(8);
         manager = new MemoryManager(new MemoryManager(mem), registers);
-        stack = new Stack(2);
-        cu = new Cu(manager, stack);
+        cu = new Cu(manager, new Stack(2));
         operation = new Operation(manager);
     }
 
