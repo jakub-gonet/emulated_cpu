@@ -232,6 +232,23 @@ class CuTest {
     }
 
     @Test
+    void ADD_SUB(){
+        mem = new Memory(List.of(
+                5,
+                3,
+                Helpers.opCode(16, 2, 1, 1), 0, 0,
+                Helpers.opCode(17, 2, 1, 0), 1, 8
+        ));
+        init(mem);
+
+        int PC = runNCommandsFrom(2, 1);
+        Assertions.assertEquals(10, mem.read(0));
+
+        runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(-5, mem.read(1));
+    }
+
+    @Test
     void logicOpCodes() {
 
     }
