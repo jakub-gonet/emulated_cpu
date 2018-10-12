@@ -39,8 +39,7 @@ class CuTest {
         ));
         init(mem);
 
-        int PC = operation.fetch(0);
-        cu.execute(PC, operation);
+        runNCommandsFrom(0, 1);
 
         Assertions.assertTrue(registers.statusRegister()
                                        .state(StatusRegister.StatusFlags.STOPPED));
@@ -54,8 +53,7 @@ class CuTest {
         ));
         init(mem);
 
-        int PC = operation.fetch(1);
-        cu.execute(PC, operation);
+        runNCommandsFrom(1, 1);
 
         Assertions.assertEquals(50, mem.read(0));
     }
@@ -78,8 +76,7 @@ class CuTest {
         ));
         init(mem);
 
-        int PC = operation.fetch(0);
-        PC = cu.execute(PC, operation);
+        int PC = runNCommandsFrom(0, 1);
 
         Assertions.assertEquals(0, PC);
     }
@@ -209,17 +206,29 @@ class CuTest {
         init(mem);
 
 
-        int PC = cu.execute(operation.fetch(0), operation);
+        int PC = runNCommandsFrom(0,1);
         Assertions.assertFalse(stack.isEmpty());
         Assertions.assertEquals(3, PC);
 
-        PC = cu.execute(operation.fetch(PC), operation);
+        PC = runNCommandsFrom(PC,1);
         Assertions.assertEquals(2, PC);
     }
 
     @Test
-    void arithmeticOpCodes() {
+    void INC_DEC() {
+        mem = new Memory(List.of(
+                0,
+                0,
+                Helpers.opCode(14, 1, 1, 0), 0,
+                Helpers.opCode(15, 1, 1, 0), 1
+        ));
+        init(mem);
 
+        int PC = runNCommandsFrom(2, 1);
+        Assertions.assertEquals(1, mem.read(0));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertEquals(-1, mem.read(1));
     }
 
     @Test
