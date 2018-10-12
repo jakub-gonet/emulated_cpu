@@ -1,6 +1,6 @@
 package cpu.processing.operations;
 
-public class InstructionDecoder {
+public final class InstructionDecoder {
     private static final int addrModeLength = 8;
     private static final int addrModeBitFieldLength = (int) Math.pow(2, addrModeLength) - 1;
     private static final int argNumLength = 2;
