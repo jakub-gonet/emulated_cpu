@@ -301,13 +301,33 @@ class CuTest {
         PC = runNCommandsFrom(PC, 1);
         Assertions.assertEquals(8, mem.read(4));
 
-        PC = runNCommandsFrom(PC, 1);
+        runNCommandsFrom(PC, 1);
         Assertions.assertEquals(1, mem.read(5));
     }
 
     @Test
     void CMP() {
+        mem = new Memory(List.of(
+                Helpers.opCode(26, 2, 2, 0), 1, 12,
+                Helpers.opCode(26, 2, 2, 0), 2, 10,
+                Helpers.opCode(26, 2, 2, 0), 3, 8
+        ));
+        init(mem);
+        registers.write(1, 10);
+        registers.write(2, 10);
+        registers.write(3, 10);
 
+        int PC = runNCommandsFrom(0, 1);
+        Assertions.assertTrue(registers.statusRegister()
+                                         .state(StatusRegister.StatusFlags.NEGATIVE));
+
+        PC = runNCommandsFrom(PC, 1);
+        Assertions.assertTrue(registers.statusRegister()
+                                       .state(StatusRegister.StatusFlags.ZERO));
+
+        runNCommandsFrom(PC, 1);
+        Assertions.assertTrue(registers.statusRegister()
+                                       .state(StatusRegister.StatusFlags.POSITIVE));
     }
 
     private void init(Memory mem) {
