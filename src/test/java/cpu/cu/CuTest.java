@@ -8,11 +8,10 @@ import cpu.memory.registers.Registers;
 import cpu.memory.registers.StatusRegister;
 import cpu.processing.Cu;
 import cpu.processing.operations.Operation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.EmptyStackException;
 import java.util.List;
 
 class CuTest {
@@ -21,7 +20,6 @@ class CuTest {
     private Cu cu;
     private Operation operation;
     private Registers registers;
-    private Logger logger = LogManager.getLogger(CuTest.class);
 
     @Test
     void NOP() {
@@ -164,8 +162,41 @@ class CuTest {
     }
 
     @Test
-    void PUSH_POP() {
+    void PUSH_POP_withValidData() {
+        mem = new Memory(List.of(
+                Helpers.opCode(10, 1, 0, 0), 2,
+                Helpers.opCode(11, 1, 2, 0), 0
+        ));
+        init(mem);
 
+        runNCommandsFrom(0, 2);
+
+        Assertions.assertEquals(2, registers.read(0));
+    }
+
+    @Test
+    void PUSH_stackOverflow() {
+        mem = new Memory(List.of(
+                Helpers.opCode(10, 1, 0, 0), 2,
+                Helpers.opCode(10, 1, 0, 0), 2,
+                Helpers.opCode(10, 1, 0, 0), 2
+        ));
+        init(mem);
+
+        int PC = runNCommandsFrom(0, 2);
+        int PC2 = operation.fetch(PC);
+        Assertions.assertThrows(IllegalStateException.class, () -> cu.execute(PC2, operation));
+    }
+
+    @Test
+    void POP_onEmptyStack() {
+        mem = new Memory(List.of(
+                Helpers.opCode(11, 1, 1, 0), 0
+        ));
+        init(mem);
+
+        int PC = operation.fetch(0);
+        Assertions.assertThrows(EmptyStackException.class, () -> cu.execute(PC, operation));
     }
 
     @Test
