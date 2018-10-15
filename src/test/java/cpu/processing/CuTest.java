@@ -117,7 +117,7 @@ class CuTest {
     @Test
     void JL_JLE() {
         mem = new Memory(List.of(
-                Helpers.opCode(26, 2, 0, 0), -1, 1,
+                Helpers.opCode(26, 2, 0, 0), 1, 2,
                 Helpers.opCode(6, 1, 0, 0), 0,
                 Helpers.opCode(26, 2, 0, 0), 1, 1,
                 Helpers.opCode(6, 1, 0, 0), 0,
@@ -125,6 +125,8 @@ class CuTest {
                 Helpers.opCode(26, 2, 0, 0), 1, 1,
                 Helpers.opCode(7, 1, 0, 0), 0,
                 Helpers.opCode(26, 2, 0, 0), 2, 1,
+                Helpers.opCode(7, 1, 0, 0), 0,
+                Helpers.opCode(26, 2, 0, 0), 1, 2,
                 Helpers.opCode(7, 1, 0, 0), 0
         ));
         init(mem);
@@ -134,6 +136,8 @@ class CuTest {
 
         Assertions.assertEquals(0, runNCommandsFrom(10, 2));
         Assertions.assertEquals(20, runNCommandsFrom(15, 2));
+        Assertions.assertEquals(0, runNCommandsFrom(20, 2));
+
     }
 
     @Test
