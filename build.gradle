@@ -16,3 +16,13 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
     compile group: 'com.lmax', name: 'disruptor', version: '3.3.7'
 }
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    maxHeapSize = '1G'
+    maxParallelForks=8
+}
