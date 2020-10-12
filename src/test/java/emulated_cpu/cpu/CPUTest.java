@@ -72,7 +72,7 @@ class CPUTest {
             0xd0, -1
         )));
 
-        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, cpu::executeNextOperation);
+        Assertions.assertThrows(IndexOutOfBoundsException.class, cpu::executeNextOperation);
 
         //==============================================
 
